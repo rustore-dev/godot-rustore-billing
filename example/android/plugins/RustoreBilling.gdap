@@ -1,0 +1,10 @@
+[config]
+
+name="RustoreBilling"
+binary_type="local"
+binary="rustore-billing-release.aar"
+
+[dependencies]
+
+custom_maven_repos=["https://artifactory-external.vkpartner.ru/artifactory/maven"]
+remote=["ru.rustore.sdk:billingclient:2.1.0"]

@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://cp2nerfeejhfq"]
+
+[ext_resource type="Theme" uid="uid://dvj4pjg1srxb3" path="res://theme.tres" id="1_k14we"]
+[ext_resource type="Script" path="res://src/product.gd" id="1_vtak4"]
+
+[node name="Product" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_vtak4")
+
+[node name="ProductPanel" type="Panel" parent="."]
+clip_contents = true
+custom_minimum_size = Vector2(2.08165e-12, 280)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ProductPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ProductPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="ProductId" type="Label" parent="ProductPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_k14we")
+text = "Id: "
+
+[node name="ProductTitle" type="Label" parent="ProductPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_k14we")
+text = "Title: "
+
+[node name="ProductType" type="Label" parent="ProductPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_k14we")
+text = "Type: "
+
+[node name="ProductStatus" type="Label" parent="ProductPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_k14we")
+text = "Status: "
+
+[node name="ProductPrice" type="Label" parent="ProductPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_k14we")
+text = "Price: "
+
+[node name="Purchase" type="Button" parent="ProductPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -73.0
+offset_top = 34.0
+offset_right = -35.0
+offset_bottom = 65.0
+grow_horizontal = 0
+theme = ExtResource("1_k14we")
+text = "Purchase"
