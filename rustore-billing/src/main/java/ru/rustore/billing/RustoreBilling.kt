@@ -10,6 +10,7 @@ import org.godotengine.godot.plugin.UsedByGodot
 import ru.rustore.sdk.billingclient.RuStoreBillingClient
 import ru.rustore.sdk.billingclient.RuStoreBillingClientFactory
 import ru.rustore.sdk.billingclient.model.purchase.PaymentResult
+import ru.rustore.sdk.billingclient.model.purchase.response.ConfirmPurchaseResponse
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 
 class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
@@ -209,10 +210,15 @@ class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun purchaseProduct(product: String) {
+    fun purchaseProduct(product: String, orderId: String = "", quantity: Int = 0, payload: String = "") {
         val response = Dictionary()
 
-        client.purchases.purchaseProduct(product)
+        client.purchases.purchaseProduct(
+            productId =  product,
+            orderId = orderId,
+            quantity = quantity,
+            developerPayload = payload,
+        )
             .addOnSuccessListener { payment ->
                 when (payment) {
                     is PaymentResult.Cancelled -> {
@@ -223,11 +229,19 @@ class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
                     is PaymentResult.Success -> {
                         response.put("status", SUCCESS)
                         response.put("purchase", payment.purchaseId)
+                        response.put("purchase_id", payment.purchaseId)
+                        response.put("invoice_id", payment.invoiceId)
+                        response.put("order_id", payment.orderId.orEmpty())
+                        response.put("product_id", payment.productId)
                     }
 
                     is PaymentResult.Failure -> {
                         response.put("status", FAILURE)
-                        response.put("purchase", payment.purchaseId.orEmpty())
+                        response.put("purchase_id", payment.purchaseId.orEmpty())
+                        response.put("invoice_id", payment.invoiceId.orEmpty())
+                        response.put("order_id", payment.orderId.orEmpty())
+                        response.put("product_id", payment.productId.orEmpty())
+                        response.put("quantity", payment.quantity ?: 0)
                         response.put("error_code", payment.errorCode ?: 0)
                     }
 
@@ -267,12 +281,13 @@ class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun confirmPurchase(id: String) {
+    fun confirmPurchase(id: String, payload: String?) {
         val response = Dictionary()
 
-        client.purchases.confirmPurchase(id)
+        client.purchases.confirmPurchase(id, payload)
             .addOnSuccessListener {
                 response.put("status", SUCCESS)
+                response.put("payload", payload.orEmpty())
 
                 emitSignal(CHANNEL_CONFIRM_PURCHASE, response)
             }.addOnFailureListener { throwable ->
