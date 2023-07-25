@@ -60,7 +60,7 @@ func _on_availability(data: Dictionary):
 
 func _purchase(id: String):
 	if billing != null:
-		billing.purchaseProduct(id)
+		billing.purchaseProduct(id, "", 1, "")
 
 
 func _on_purchase(data: Dictionary):
@@ -133,8 +133,9 @@ func _on_get_purchases(data: Dictionary):
 			purchase.info.connect(_info)
 			
 			purchases.add_child(purchase)
-	else:
-		print(data)
+	elif data['status'] == 'failure':
+		print('failure')
+		print(data['message'])
 
 
 func _info(id: String):
@@ -185,5 +186,6 @@ func _on_get_products(data: Dictionary):
 			product.purchase.connect(_purchase)
 				
 			products.add_child(product)
-	else:
-		print(data)
+	elif data['status'] == 'failure':
+		print('failure')
+		print(data['message'])

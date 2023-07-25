@@ -9,3 +9,5 @@
 .cxx
 local.properties
 proton.keystore
+/release
+release.zip

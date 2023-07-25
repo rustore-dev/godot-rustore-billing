@@ -21,3 +21,12 @@ tasks:
     cmds:
       - cp rustore-billing/build/outputs/aar/rustore-billing-debug.aar ./example/android/plugins/rustore-billing-release.aar
       - cp rustore-billing/build/outputs/aar/RustoreBilling.gdap ./example/android/plugins/RustoreBilling.gdap
+
+  release:
+    deps: [build]
+    cmds:
+      - rm -rf ./release
+      - mkdir -p ./release
+      - cp rustore-billing/build/outputs/aar/rustore-billing-debug.aar ./release/rustore-billing-release.aar
+      - cp rustore-billing/build/outputs/aar/RustoreBilling.gdap ./release/RustoreBilling.gdap
+      - zip release.zip ./release/*
