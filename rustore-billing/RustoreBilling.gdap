@@ -2,7 +2,7 @@
 
 name="RustoreBilling"
 binary_type="local"
-binary="rustore-billing-release.aar"
+binary="rustore-billing.aar"
 
 [dependencies]
 

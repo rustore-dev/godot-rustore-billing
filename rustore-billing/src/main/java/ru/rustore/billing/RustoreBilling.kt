@@ -10,7 +10,6 @@ import org.godotengine.godot.plugin.UsedByGodot
 import ru.rustore.sdk.billingclient.RuStoreBillingClient
 import ru.rustore.sdk.billingclient.RuStoreBillingClientFactory
 import ru.rustore.sdk.billingclient.model.purchase.PaymentResult
-import ru.rustore.sdk.billingclient.model.purchase.response.ConfirmPurchaseResponse
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 
 class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
@@ -56,6 +55,7 @@ class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
 
                 is FeatureAvailabilityResult.Unavailable -> {
                     response.put("result", "unavailable")
+                    response.put("cause", result.cause.message)
                 }
 
                 else -> Unit
@@ -210,11 +210,26 @@ class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun purchaseProduct(product: String, orderId: String = "", quantity: Int = 0, payload: String = "") {
+    fun purchaseProduct(product: String, params: Dictionary) {
         val response = Dictionary()
 
+        val orderId = if (params.containsKey("order_id"))
+            params.get("order_id").toString()
+        else
+            null
+
+        val quantity = if (params.containsKey("quantity"))
+            params.get("quantity") as? Int
+        else
+            null
+
+        val payload = if (params.containsKey("payload"))
+            params.get("payload").toString()
+        else
+            null
+
         client.purchases.purchaseProduct(
-            productId =  product,
+            productId = product,
             orderId = orderId,
             quantity = quantity,
             developerPayload = payload,
@@ -281,8 +296,13 @@ class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun confirmPurchase(id: String, payload: String?) {
+    fun confirmPurchase(id: String, params: Dictionary) {
         val response = Dictionary()
+
+        val payload = if (params.containsKey("payload"))
+            params.get("payload").toString()
+        else
+            null
 
         client.purchases.confirmPurchase(id, payload)
             .addOnSuccessListener {

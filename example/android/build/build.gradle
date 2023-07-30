@@ -21,6 +21,7 @@ apply from: 'config.gradle'
 
 allprojects {
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
 

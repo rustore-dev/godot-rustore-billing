@@ -14,19 +14,24 @@ tasks:
   build:
     cmds:
       - ./gradlew build
-      - cp rustore-billing/RustoreBilling.gdap rustore-billing/build/outputs/aar/RustoreBilling.gdap
 
   example:
     deps: [build]
     cmds:
-      - cp rustore-billing/build/outputs/aar/rustore-billing-debug.aar ./example/android/plugins/rustore-billing-release.aar
-      - cp rustore-billing/build/outputs/aar/RustoreBilling.gdap ./example/android/plugins/RustoreBilling.gdap
+      - cp rustore-billing/build/outputs/aar/rustore-billing-debug.aar ./example/android/plugins/rustore-billing.aar
+      - cp rustore-billing/RustoreBilling.gdap ./example/android/plugins/RustoreBilling.gdap
+
+  qa:
+    deps: [build]
+    cmds:
+      - cp rustore-billing/build/outputs/aar/rustore-billing-debug.aar ./example/android/plugins/rustore-billing.aar
+      - cp rustore-billing/RustoreBillingQA.gdap ./example/android/plugins/RustoreBilling.gdap
 
   release:
     deps: [build]
     cmds:
       - rm -rf ./release
       - mkdir -p ./release
-      - cp rustore-billing/build/outputs/aar/rustore-billing-debug.aar ./release/rustore-billing-release.aar
-      - cp rustore-billing/build/outputs/aar/RustoreBilling.gdap ./release/RustoreBilling.gdap
+      - cp rustore-billing/build/outputs/aar/rustore-billing-release.aar ./release/rustore-billing.aar
+      - cp rustore-billing/RustoreBilling.gdap ./release/RustoreBilling.gdap
       - zip release.zip ./release/*
