@@ -31,15 +31,8 @@ android {
 }
 
 dependencies {
-    File gdap = new File("rustore-billing/RustoreBilling.gdap")
-    def match = gdap.text =~ /(?<=remote=)[^;]+/
-
-    def remote = Eval.me(match[0])
-
-    for(item in remote){
-        println "implementing $item"
-        implementation item
-    }
+    implementation 'ru.rustore.sdk:billingclient:2.1.1-QA'
+//    implementation 'ru.rustore.sdk:billingclient:2.1.1'
 
     compileOnly project(':godot-lib')
 

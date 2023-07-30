@@ -31,7 +31,7 @@ func _ready():
 	if Engine.has_singleton("RustoreBilling"):
 		billing = Engine.get_singleton("RustoreBilling")
 		
-		billing.init("2063485466", "example")
+		billing.init("183586", "example")
 		
 		billing.rustore_is_available.connect(_on_availability)
 		billing.rustore_purchase_product.connect(_on_purchase)
@@ -55,12 +55,12 @@ func _on_availability(data: Dictionary):
 		$CanvasLayer/Availability/Label.text = "Availability: " + data['result']
 	elif data['status'] == 'failure':
 		print('failure')
-		print(data['message'])
+		print(data)
 
 
 func _purchase(id: String):
 	if billing != null:
-		billing.purchaseProduct(id, "", 1, "")
+		billing.purchaseProduct(id, {})
 
 
 func _on_purchase(data: Dictionary):
@@ -72,7 +72,7 @@ func _on_purchase(data: Dictionary):
 		print('success')
 	elif data['status'] == 'failure':
 		print('failure')
-		print(data['message'])
+		print(data)
 
 
 func _delete(id: String):
@@ -92,7 +92,7 @@ func _on_delete(data: Dictionary):
 
 func _confirm(id: String):
 	if billing != null:
-		billing.confirmPurchase(id)
+		billing.confirmPurchase(id, {})
 
 
 func _on_confirm(data: Dictionary):
@@ -111,7 +111,6 @@ func _get_purchases():
 
 
 func _on_get_purchases(data: Dictionary):
-	
 	for child in purchases.get_children():
 		child.queue_free()
 		
@@ -158,12 +157,12 @@ func _on_get_purchase_info(data: Dictionary):
 func _get_products():
 	if billing != null:
 		billing.getProducts([
-			"unrealV3Con-020623-1",
-			"unrealV3Con-020623-2",
-			"unrealV3NonCon-020623-1",
-			"unrealV3NonCon-020623-2",
-			"unrealV3Sub-020623-1",
-			"unrealV3Sub-020623-2"
+			"SDK_sampleRN_con_280723_1",
+			"SDK_sampleRN_con_280723_2",
+			"SDK_sampleGodot_non_con_280223_1",
+			"SDK_sampleGodot_non_con_280723_22",
+			"SDK_sampleGodot_sub_280723_1",
+			"SDK_sampleGodot_sub_280723_2"
 		])
 
 
