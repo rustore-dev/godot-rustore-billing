@@ -31,8 +31,7 @@ android {
 }
 
 dependencies {
-    implementation 'ru.rustore.sdk:billingclient:2.1.1-QA'
-//    implementation 'ru.rustore.sdk:billingclient:2.1.1'
+    implementation 'ru.rustore.sdk:billingclient:2.1.1'
 
     compileOnly project(':godot-lib')
 
