@@ -1,10 +1,8 @@
 package ru.rustore.billing
 
-import android.app.Activity
 import android.content.Intent
 import android.util.ArraySet
 import android.util.Log
-import android.view.View
 import org.godotengine.godot.Dictionary
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
