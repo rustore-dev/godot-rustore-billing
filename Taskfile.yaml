@@ -30,6 +30,7 @@ tasks:
   release:
     deps: [build]
     cmds:
+      - rm release.zip
       - rm -rf ./release
       - mkdir -p ./release
       - cp rustore-billing/build/outputs/aar/rustore-billing-release.aar ./release/rustore-billing.aar

@@ -10,9 +10,10 @@ extends Node2D
 
 var billing: Object
 
+
 func _close_availability():
 	$CanvasLayer/Availability.hide()
-	$CanvasLayer/Availability/Label.text = "Availability: "
+	$CanvasLayer/Availability/Label.text = ""
 
 
 func _close_info():
@@ -41,21 +42,25 @@ func _ready():
 		billing.rustore_get_purchase.connect(_on_get_purchase_info)
 		billing.rustore_get_products.connect(_on_get_products)
 
+
 func _availability():
 	if billing != null:
 		billing.isAvailable()
 	
 	
 func _on_availability(data: Dictionary):
-	if data['status'] == 'success':
+	if data.has('status') and data['status'] == 'success':
 		print('success')
 		print(data['result'])
 		
 		$CanvasLayer/Availability.show()
 		$CanvasLayer/Availability/Label.text = "Availability: " + data['result']
-	elif data['status'] == 'failure':
+	elif data.has('status') and data['status'] == 'failure':
 		print('failure')
 		print(data)
+		
+		$CanvasLayer/Availability.show()
+		$CanvasLayer/Availability/Label.text = data
 
 
 func _purchase(id: String):
@@ -64,15 +69,22 @@ func _purchase(id: String):
 
 
 func _on_purchase(data: Dictionary):
-	if data['status'] == 'cancelled':
+	if data.has('status') and data['status'] == 'cancelled':
 		print('cancelled')
-		if data['purchase'] != '':
+		if data.has('purchase') && data['purchase'] != '':
 			_delete(data['purchase'])
-	elif data['status'] == 'success':
+	elif data.has('status') and data['status'] == 'success':
 		print('success')
-	elif data['status'] == 'failure':
+		print(data)
+		
+		$CanvasLayer/Availability.show()
+		$CanvasLayer/Availability/Label.text = data
+	elif data.has('status') and data['status'] == 'failure':
 		print('failure')
 		print(data)
+		
+		$CanvasLayer/Availability.show()
+		$CanvasLayer/Availability/Label.text = data
 
 
 func _delete(id: String):
@@ -82,12 +94,15 @@ func _delete(id: String):
 
 func _on_delete(data: Dictionary):
 	print(data)
-	if data['status'] == 'success':
+	if data.has('status') and data['status'] == 'success':
 		print('success')
 		_get_purchases()
 	else:
 		print('failure')
-		print(data['message'])
+		print(data)
+		
+		$CanvasLayer/Availability.show()
+		$CanvasLayer/Availability/Label.text = data
 
 
 func _confirm(id: String):
@@ -97,12 +112,15 @@ func _confirm(id: String):
 
 func _on_confirm(data: Dictionary):
 	print(data)
-	if data['status'] == 'success':
+	if data.has('status') and data['status'] == 'success':
 		print('success')
 		_get_purchases()
 	else:
 		print('failure')
-		print(data['message'])
+		print(data)
+		
+		$CanvasLayer/Availability.show()
+		$CanvasLayer/Availability/Label.text = data
 
 
 func _get_purchases():
@@ -114,7 +132,7 @@ func _on_get_purchases(data: Dictionary):
 	for child in purchases.get_children():
 		child.queue_free()
 		
-	if data['status'] == 'success' and data.has('items'):
+	if data.has('status') and data['status'] == 'success' and data.has('items'):
 		var items = data['items']
 		for key in items:
 			print(items[key])
@@ -132,9 +150,12 @@ func _on_get_purchases(data: Dictionary):
 			purchase.info.connect(_info)
 			
 			purchases.add_child(purchase)
-	elif data['status'] == 'failure':
+	else:
 		print('failure')
-		print(data['message'])
+		print(data)
+		
+		$CanvasLayer/Availability.show()
+		$CanvasLayer/Availability/Label.text = data
 
 
 func _info(id: String):
@@ -143,15 +164,18 @@ func _info(id: String):
 		
 
 func _on_get_purchase_info(data: Dictionary):
-	if data['status'] == 'success':
+	if data.has('status') and data['status'] == 'success':
 		print('success')
 		print(data['purchase'])
 		
 		$CanvasLayer/PurchaseInfo.show()
 		$CanvasLayer/PurchaseInfo/Label.text = data
-	elif data['status'] == 'failure':
+	else:
 		print('failure')
-		print(data['message'])
+		print(data)
+		
+		$CanvasLayer/PurchaseInfo.show()
+		$CanvasLayer/PurchaseInfo/Label.text = data
 
 
 func _get_products():
@@ -171,7 +195,7 @@ func _on_get_products(data: Dictionary):
 	for child in products.get_children():
 		child.queue_free()
 		
-	if data['status'] == 'success' and data.has('items'):
+	if data.has('status') and data['status'] == 'success' and data.has('items'):
 		var items = data['items']
 		for key in items:
 			print(items[key])
@@ -185,6 +209,10 @@ func _on_get_products(data: Dictionary):
 			product.purchase.connect(_purchase)
 				
 			products.add_child(product)
-	elif data['status'] == 'failure':
+	else:
 		print('failure')
-		print(data['message'])
+		print(data)
+		
+		$CanvasLayer/PurchaseInfo.show()
+		$CanvasLayer/PurchaseInfo/Label.text = data
+

@@ -2,4 +2,4 @@
 .godot/
 android/build/build/
 android/build/.idea/
-RustoreBillingExample.apk
+/*.apk

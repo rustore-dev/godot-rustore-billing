@@ -12,13 +12,24 @@ config_version=5
 
 config/name="RustoreBillingExample"
 run/main_scene="res://scenes/main.tscn"
+config/auto_accept_quit=false
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.1", "GL Compatibility")
+boot_splash/show_image=false
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://icon.svg"
 
 [display]
 
 window/size/viewport_width=648
 window/size/viewport_height=1152
+window/size/mode=2
+window/size/resizable=false
+window/size/always_on_top=true
+window/size/extend_to_title=true
+window/size/no_focus=true
+window/energy_saving/keep_screen_on.editor=true
 window/handheld/orientation=1
 
 [rendering]
