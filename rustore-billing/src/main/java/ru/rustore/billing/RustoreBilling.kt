@@ -1,7 +1,10 @@
 package ru.rustore.billing
 
+import android.app.Activity
+import android.content.Intent
 import android.util.ArraySet
 import android.util.Log
+import android.view.View
 import org.godotengine.godot.Dictionary
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -355,6 +358,14 @@ class RustoreBilling(godot: Godot?) : GodotPlugin(godot) {
 
                 emitSignal(CHANNEL_GET_PURCHASE, response)
             }
+    }
+
+    override fun onMainActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onMainActivityResult(requestCode, resultCode, data)
+
+        if (data != null) {
+            client.onNewIntent(data)
+        }
     }
 
     private companion object {
