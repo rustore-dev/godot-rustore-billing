@@ -1,0 +1,118 @@
+[gd_scene load_steps=3 format=3 uid="uid://dknb2mp2tvcjx"]
+
+[ext_resource type="Script" path="res://src/purchase.gd" id="1_r3wlc"]
+[ext_resource type="Theme" uid="uid://dvj4pjg1srxb3" path="res://theme.tres" id="2_1wwwd"]
+
+[node name="Purchase" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_r3wlc")
+
+[node name="PurchasePanel" type="Panel" parent="."]
+clip_contents = true
+custom_minimum_size = Vector2(0, 600)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PurchasePanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PurchasePanel/MarginContainer"]
+layout_mode = 2
+
+[node name="PurchaseId" type="Label" parent="PurchasePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = "Id: "
+
+[node name="PurchaseTime" type="Label" parent="PurchasePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = "Title: "
+
+[node name="PurchaseType" type="Label" parent="PurchasePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = "Type: "
+
+[node name="PurchaseState" type="Label" parent="PurchasePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = "Status: "
+
+[node name="PurchaseAmount" type="Label" parent="PurchasePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = "Amount: "
+
+[node name="PurchaseInvoiceId" type="Label" parent="PurchasePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = "InvoiceId: "
+
+[node name="PurchaseOrderId" type="Label" parent="PurchasePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = "OrderId: "
+
+[node name="Delete" type="Button" parent="PurchasePanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -230.0
+offset_top = 172.0
+offset_right = -47.0
+offset_bottom = 247.0
+grow_horizontal = 0
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = " Delete "
+
+[node name="Confirm" type="Button" parent="PurchasePanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -262.0
+offset_top = 47.0
+offset_right = -43.0
+offset_bottom = 122.0
+grow_horizontal = 0
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = " Confirm "
+
+[node name="Info" type="Button" parent="PurchasePanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -190.0
+offset_top = 299.0
+offset_right = -47.0
+offset_bottom = 374.0
+grow_horizontal = 0
+theme = ExtResource("2_1wwwd")
+theme_override_font_sizes/font_size = 48
+text = " Info "
+
+[connection signal="pressed" from="PurchasePanel/Delete" to="." method="_on_delete_pressed"]
+[connection signal="pressed" from="PurchasePanel/Confirm" to="." method="_on_confirm_pressed"]
+[connection signal="pressed" from="PurchasePanel/Info" to="." method="_on_info_pressed"]

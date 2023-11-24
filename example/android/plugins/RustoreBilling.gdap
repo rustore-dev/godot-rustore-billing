@@ -1,9 +1,0 @@
-[config]
-
-name="RustoreBilling"
-binary_type="local"
-binary="rustore-billing.aar"
-
-[dependencies]
-
-remote=["ru.rustore.sdk:billingclient:2.1.1-QA"]

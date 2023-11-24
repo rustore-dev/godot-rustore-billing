@@ -1,0 +1,95 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqdrak1ed880t"]
+
+[ext_resource type="Script" path="res://src/main.gd" id="1_2u3nm"]
+[ext_resource type="PackedScene" uid="uid://cp2nerfeejhfq" path="res://scenes/product.tscn" id="1_q2awq"]
+[ext_resource type="Theme" uid="uid://dvj4pjg1srxb3" path="res://theme.tres" id="2_r7fnr"]
+[ext_resource type="PackedScene" uid="uid://dknb2mp2tvcjx" path="res://scenes/purchase.tscn" id="4_to0yq"]
+
+[node name="shop" type="Node2D"]
+script = ExtResource("1_2u3nm")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainerTop" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="CheckPurchasesAvailabilityButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_r7fnr")
+theme_override_font_sizes/font_size = 48
+text = " Check purchases availability "
+
+[node name="MarginContainerMiddle" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="CanvasLayer/VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_r7fnr")
+theme_override_font_sizes/font_size = 48
+
+[node name="Products" type="ScrollContainer" parent="CanvasLayer/VBoxContainer/TabContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Products" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/TabContainer/Products"]
+custom_minimum_size = Vector2(2.08165e-12, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="UpdateProductsListButton" type="Button" parent="CanvasLayer/VBoxContainer/TabContainer/Products/Products"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme = ExtResource("2_r7fnr")
+theme_override_font_sizes/font_size = 48
+text = " Update products list "
+
+[node name="ProductsList" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/TabContainer/Products/Products"]
+layout_mode = 2
+
+[node name="Product" parent="CanvasLayer/VBoxContainer/TabContainer/Products/Products/ProductsList" instance=ExtResource("1_q2awq")]
+visible = false
+layout_mode = 2
+
+[node name="Purchases" type="ScrollContainer" parent="CanvasLayer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Purchases" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/TabContainer/Purchases"]
+custom_minimum_size = Vector2(2.08165e-12, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="UpdatePurchasesListButton" type="Button" parent="CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("2_r7fnr")
+theme_override_font_sizes/font_size = 48
+text = " Update purchases list "
+
+[node name="PurchasesList" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases"]
+layout_mode = 2
+
+[node name="Purchase" parent="CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases/PurchasesList" instance=ExtResource("4_to0yq")]
+visible = false
+layout_mode = 2
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/CheckPurchasesAvailabilityButton" to="." method="_on_check_purchases_availability_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/TabContainer/Products/Products/UpdateProductsListButton" to="." method="_on_update_products_list_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases/UpdatePurchasesListButton" to="." method="_on_update_purchases_list_button_pressed"]

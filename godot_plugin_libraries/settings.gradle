@@ -1,0 +1,3 @@
+rootProject.name = "godot_plugin_libraries"
+include ':RuStoreGodotCore'
+include ':RuStoreGodotBilling'

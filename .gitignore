@@ -1,14 +1,1 @@
-*.iml
-.gradle
-/local.properties
-.idea
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-proton.keystore
-/release
-release.zip
-/rustore-billing/RustoreBillingQA.gdap
+QA/
