@@ -1,8 +1,8 @@
-## RuStore Godot плагин для обновления приложения
+## RuStore Godot плагин для оплат через приложение
 
-Плагин “RuStoreGodotAppUpdate” помогает поддерживать актуальную версию вашего приложения на устройстве пользователя.
+Плагин RuStoreBilling помогает интегрировать в ваш проект механизм оплаты через сторонние приложения (например, SberPay или СБП).
 
-Репозиторий содержит плагины “RuStoreGodotAppUpdate” и “RuStoreGodotCore”, а также демонстрационное приложение с примерами использования и настроек. Поддерживаются версии Godot 4+.
+Репозиторий содержит плагины “RuStoreGodotBilling” и “RuStoreGodotCore”, а также демонстрационное приложение с примерами использования и настроек. Поддерживаются версии Godot 4+.
 
 ### Сборка плагина
 
@@ -13,8 +13,8 @@
 3. Выполните сборку проекта командой gradle assemble.
 
 При успешном выполнении сборки в папке _“godot_example / android / plugins”_ будут созданы файлы:
-- RuStoreGodotAppUpdate.gdap
-- RuStoreGodotAppUpdate.aar
+- RuStoreGodotBilling.gdap
+- RuStoreGodotBilling.aar
 - RuStoreGodotCore.gdap
 - RuStoreGodotCore.aar
 
@@ -27,7 +27,7 @@
 
 2. Скопируйте содержимое папки _“godot_example / android / plugins”_ в папку _“*your_project* / android / plugins”_.
 
-3. В пресете сборки Android в списке "Плагины" отметьте плагины “Ru Store Godot App Update” и “Ru Store Godot Core”
+3. В пресете сборки Android в списке "Плагины" отметьте плагины “Ru Store Godot Billing” и “Ru Store Godot Core”
 
 
 ### Сборка примера приложения
@@ -40,7 +40,7 @@
 
 4. Добавьте пресет сборки Android (Проект → Экспорт... → Добавить... → Android).
 
-5. В пресете сборки Android в списке "Плагины" отметьте плагины “Ru Store Godot App Update” и “Ru Store Godot Core”
+5. В пресете сборки Android в списке "Плагины" отметьте плагины “Ru Store Godot Billing” и “Ru Store Godot Core”
 
 6. Настройте разделы “Хранилище ключей”, “Версия” и “Пакет” под параметры вашего приложения в RuStore. Подробная информация о публикации приложений в RuStore доступна на странице [help](https://help.rustore.ru/rustore/for_developers/publishing_and_verifying_apps).
 
