@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.rustore.godot.core">
+    <application>
+        <meta-data
+            android:name="org.godotengine.plugin.v1.RuStoreGodotCore"
+            android:value="ru.rustore.godot.core.RuStoreGodotCore" />
+    </application>
+</manifest>
