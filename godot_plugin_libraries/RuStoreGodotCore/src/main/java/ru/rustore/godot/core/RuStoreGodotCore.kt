@@ -20,28 +20,33 @@ class RuStoreGodotCore(godot: Godot?): GodotPlugin(godot) {
 
     @UsedByGodot
     fun showToast(message: String) {
-        godot.requireActivity().runOnUiThread { Toast.makeText(activity, message, Toast.LENGTH_LONG).show() }
+        godot.getActivity()?.runOnUiThread { Toast.makeText(activity, message, Toast.LENGTH_LONG).show() }
     }
 
     @UsedByGodot
     fun copyToClipboard(text: String) {
-        val clipboard: ClipboardManager = godot.requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText(CLIP_DATA_TOOLTIP, text)
-        clipboard.setPrimaryClip(clip)
+        godot.getActivity()?.run {
+            val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText(CLIP_DATA_TOOLTIP, text)
+            clipboard.setPrimaryClip(clip)
+        }
     }
 
     @UsedByGodot
     fun getFromClipboard(): String {
-        val clipboard: ClipboardManager = godot.requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip: ClipData = clipboard.primaryClip ?: return String()
-        val text = clip.getItemAt(0).text ?: return String()
-        return text.toString()
+        return godot.getActivity()?.run {
+            val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip: ClipData = clipboard.primaryClip ?: return String()
+            val text = clip.getItemAt(0).text ?: return String()
+            text.toString()
+        }.orEmpty()
     }
 
     @UsedByGodot
     fun getStringResources(name: String): String {
-        val application = godot.requireActivity().application
-        val id: Int = application.resources.getIdentifier(name, "string", application.packageName)
-        return application.getString(id)
+        return godot.getActivity()?.run {
+            val id: Int = application.resources.getIdentifier(name, "string", application.packageName)
+            application.getString(id)
+        }.orEmpty()
     }
 }
