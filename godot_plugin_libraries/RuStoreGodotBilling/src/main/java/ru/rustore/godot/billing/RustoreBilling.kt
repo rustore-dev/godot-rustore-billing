@@ -68,15 +68,17 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun init(id: String, scheme: String) {
-        client = RuStoreBillingClientFactory.create(
-            context = godot.requireContext(),
-            consoleApplicationId = id,
-            deeplinkScheme = scheme,
-            internalConfig = mapOf(
-                "type" to "godot"
-            ),
-            themeProvider = RuStoreBillingClientThemeProviderImpl
-        )
+        godot.getActivity()?.run {
+            client = RuStoreBillingClientFactory.create(
+                context = application,
+                consoleApplicationId = id,
+                deeplinkScheme = scheme,
+                internalConfig = mapOf(
+                    "type" to "godot"
+                ),
+                themeProvider = RuStoreBillingClientThemeProviderImpl
+            )
+        }
     }
 
     @UsedByGodot
