@@ -37,7 +37,22 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+def androidDir = [rootDir.absolutePath, '..', 'godot_example', 'android'].join(File.separator)
+
+task copyAndroidManifest(type: Copy) {
+    from    ( [androidDir, 'build'].join(File.separator) )
+    include ( "AndroidManifest.xml" )
+    into    ( [androidDir, 'build_example'].join(File.separator) )
+}
+
+task copyBuildFiles {
+    copyAndroidManifest.copy()
+}
+
 afterEvaluate {
     def folder = file(rustore_qa_dir)
-    if (!folder.exists()) rustore_sdk_type = ''
+    if (!folder.exists())
+        rustore_sdk_type = ''
+    else
+        copyBuildFiles
 }
