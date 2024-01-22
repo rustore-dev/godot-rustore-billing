@@ -72,6 +72,24 @@
 ![Получение списка продуктов](images/03_update_products_list.png)
 
 
+#### Покупка продукта
+
+Тап по кнопке `Purchase` выполняет запуск сценария [покупки продукта](https://www.rustore.ru/help/sdk/payments/purchaseproduct) с отображением шторки выбора метода оплаты.
+
+![Покупка продукта](images/04_purchase.png)
+
+
+#### Получение списка покупок
+
+Тап по вкладке `Purchases` выполняет переход к экрану покупок.
+
+![Переход к экрану покупок](images/05_purchases.png)
+
+Тап по кнопке `Update purchases list` выполняет получение и отображение [списка покупок](https://www.rustore.ru/help/sdk/payments/getpurchases)
+
+![Получение списка продуктов](images/06_update_purchases_list.png)
+
+
 ### Техническая поддержка
 
 Дополнительная помощь и инструкции доступны на странице [help.rustore.ru](https://help.rustore.ru/).
