@@ -58,6 +58,20 @@
 ![Начальный экран приложения](images/01_start.png)
 
 
+#### Проверка доступности работы с платежами
+
+Тап по кнопке `Check purchases availability` выполняет [проверку доступности платежей](https://www.rustore.ru/help/sdk/payments/checkpurchasesavailability)
+
+![Проверка доступности платежей](images/02_check_purchases_availability.png)
+
+
+#### Получение списка продуктов
+
+Тап по кнопке `Update products list` выполняет получение и отображение [списка продуктов](https://www.rustore.ru/help/sdk/payments/getproducts)
+
+![Получение списка продуктов](images/03_update_products_list.png)
+
+
 ### Техническая поддержка
 
 Дополнительная помощь и инструкции доступны на странице [help.rustore.ru](https://help.rustore.ru/).
