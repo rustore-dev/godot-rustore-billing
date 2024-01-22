@@ -87,7 +87,28 @@
 
 Тап по кнопке `Update purchases list` выполняет получение и отображение [списка покупок](https://www.rustore.ru/help/sdk/payments/getpurchases)
 
-![Получение списка продуктов](images/06_update_purchases_list.png)
+![Получение списка покупок](images/06_update_purchases_list.png)
+
+
+#### Получение сведений о покупке
+
+Тап по кнопке `Info` выполняет сценарий [получения сведений о покупке](https://www.rustore.ru/help/sdk/payments/getpurchaseinfo).
+
+![Получение сведений о покупке](images/07_get_purchase_info.png)
+
+
+#### Подтверждение покупки
+
+Тап по кнопке `Confirm` выполняет сценарий [подтверждения покупки](https://www.rustore.ru/help/sdk/payments/confirmpurchase). В случае успешнго выполнения сценария статус покупки меняется на `CONFIRMED`.
+
+![Подтверждение покупки](images/08_confirm_purchase.png)
+
+
+#### Отмена покупки
+
+Тап по кнопке `Delete` выполняет сценарий [отмены покупки](https://www.rustore.ru/help/sdk/payments/deletepurchase).
+
+![Отмена покупки](images/09_delete_purchase.png)
 
 
 ### Техническая поддержка
