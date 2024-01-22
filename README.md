@@ -26,8 +26,8 @@
 ### Сборка примера приложения
 
 Вы можете ознакомиться с демонстрационным приложением содержащим представление работы всех методов sdk:
+- [README](godot_example/README.md)
 - [godot_example](https://gitflic.ru/project/rustore/godot-rustore-billing/file?file=godot_example)
-- [README.md](godot_example/README.md)
 
 
 ### Установка плагина в свой проект
