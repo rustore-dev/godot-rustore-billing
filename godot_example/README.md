@@ -21,14 +21,14 @@
 
 4. Для приложения включена возможность покупок в системе [RuStore Консоль](https://console.rustore.ru/).
 
-> ⚠️ Сервис имеет некоторые ограничения на работу за пределами РФ.
+> ⚠️ Сервис имеет ограничения на работу за пределами РФ.
 
 
 ### Подготовка требуемых параметров
 
 Для корректной настройки примера приложения необходимо подготовить следующие данные:
 
-1. `consoleApplicationId` - код приложения из консоли разработчика RuStore (пример: https://console.rustore.ru/apps/123456, `consoleApplicationId` = 123456)
+1. <span style="color: green;">`consoleApplicationId`</span> - код приложения из консоли разработчика RuStore (пример: https://console.rustore.ru/apps/123456, `consoleApplicationId` = 123456). Подробная информация о публикации приложений в RuStore доступна на странице [help](https://help.rustore.ru/rustore/for_developers/publishing_and_verifying_apps).
 
 2. `applicationId` - уникальный идентификатор приложения в системе Android в формате обратного доменного имени (пример: ru.rustore.sdk.billingexample).
 
@@ -45,9 +45,9 @@
 
 2. Откройте godot проект в папке _“godot_example”_.
 
-3. В файле _“godot_example / src / main.gd”_ в параметре "APPLICATION_ID" укажите `consoleApplicationId` - код приложения из консоли разработчика RuStore.
+3. В файле _“godot_example / src / main.gd”_ в параметре `APPLICATION_ID` укажите `consoleApplicationId` - код приложения из консоли разработчика RuStore.
 
-4. В файле _“godot_example / src / main.gd”_ в параметре "PRODUCT_IDS" перечислите `productIds` - [подписки](https://www.rustore.ru/help/developers/monetization/create-app-subscription/) и [разовые покупки](https://www.rustore.ru/help/developers/monetization/create-paid-product-in-application/) доступные в вашем приложении.
+4. В файле _“godot_example / src / main.gd”_ в параметре `PRODUCT_IDS` перечислите `productIds` - [подписки](https://www.rustore.ru/help/developers/monetization/create-app-subscription/) и [разовые покупки](https://www.rustore.ru/help/developers/monetization/create-paid-product-in-application/) доступные в вашем приложении.
 
 5. Выполните установку шаблона сборки Android (Проект → Установить шаблон сборки Android...).
 
@@ -55,25 +55,27 @@
 
 7. Добавьте пресет сборки Android (Проект → Экспорт... → Добавить... → Android).
 
-8. В пресете сборки Android в списке "Плагины" отметьте плагины “Ru Store Godot Billing” и “Ru Store Godot Core”
+8. В пресете сборки Android в списке "Плагины" отметьте плагины “Ru Store Godot Billing” и “Ru Store Godot Core”.
 
-9. Настройте разделы “Хранилище ключей”, и “Пакет” под параметры вашего приложения в RuStore. Подробная информация о публикации приложений в RuStore доступна на странице [help](https://help.rustore.ru/rustore/for_developers/publishing_and_verifying_apps).
+9. Настройте раздел “Хранилище ключей”, указав расположение и параметры ранее подготовленного файла `*.keystore`.
 
-10. Выполните сборку проекта командой “Экспорт проекта...” и проверьте работу приложения.
+10. Настройте раздел “Пакет”, указав `applicationId` в поле `Уникальное Имя`.
+
+11. Выполните сборку проекта командой “Экспорт проекта...” и проверьте работу приложения.
 
 
 ### Сценарий использования
 
 #### Проверка доступности работы с платежами
 
-Начальный экран приложения не содержит загруженных данных и уведомлений. Тап по кнопке `Check purchases availability` выполняет [проверку доступности платежей](https://www.rustore.ru/help/sdk/payments/checkpurchasesavailability)
+Начальный экран приложения не содержит загруженных данных и уведомлений. Тап по кнопке `Check purchases availability` выполняет [проверку доступности платежей](https://www.rustore.ru/help/sdk/payments/checkpurchasesavailability).
 
 ![Проверка доступности платежей](images/02_check_purchases_availability.png)
 
 
 #### Получение списка продуктов
 
-Тап по кнопке `Update products list` выполняет получение и отображение [списка продуктов](https://www.rustore.ru/help/sdk/payments/getproducts)
+Тап по кнопке `Update products list` выполняет получение и отображение [списка продуктов](https://www.rustore.ru/help/sdk/payments/getproducts).
 
 ![Получение списка продуктов](images/03_update_products_list.png)
 
@@ -85,7 +87,7 @@
 ![Покупка продукта](images/04_purchase.png)
 
 
-#### Условия распространения
+### Условия распространения
 
 Данное программное обеспечение, включая исходные коды, бинарные библиотеки и другие файлы распространяется под лицензией MIT. Информация о лицензировании доступна в документе [MIT-LICENSE](../MIT-LICENSE.txt).
 
