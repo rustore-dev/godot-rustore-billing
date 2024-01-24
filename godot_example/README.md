@@ -28,7 +28,7 @@
 
 Для корректной настройки примера приложения необходимо подготовить следующие данные:
 
-1. <span style="color: green;">`consoleApplicationId`</span> - код приложения из консоли разработчика RuStore (пример: https://console.rustore.ru/apps/123456, `consoleApplicationId` = 123456). Подробная информация о публикации приложений в RuStore доступна на странице [help](https://help.rustore.ru/rustore/for_developers/publishing_and_verifying_apps).
+1. `consoleApplicationId` - код приложения из консоли разработчика RuStore (пример: https://console.rustore.ru/apps/123456, `consoleApplicationId` = 123456). Подробная информация о публикации приложений в RuStore доступна на странице [help](https://help.rustore.ru/rustore/for_developers/publishing_and_verifying_apps).
 
 2. `applicationId` - уникальный идентификатор приложения в системе Android в формате обратного доменного имени (пример: ru.rustore.sdk.billingexample).
 
@@ -45,9 +45,9 @@
 
 2. Откройте godot проект в папке _“godot_example”_.
 
-3. В файле _“godot_example / src / main.gd”_ в параметре `APPLICATION_ID` укажите `consoleApplicationId` - код приложения из консоли разработчика RuStore.
+3. В файле _“godot_example / src / main.gd”_ в параметре "APPLICATION_ID" укажите `consoleApplicationId` - код приложения из консоли разработчика RuStore.
 
-4. В файле _“godot_example / src / main.gd”_ в параметре `PRODUCT_IDS` перечислите `productIds` - [подписки](https://www.rustore.ru/help/developers/monetization/create-app-subscription/) и [разовые покупки](https://www.rustore.ru/help/developers/monetization/create-paid-product-in-application/) доступные в вашем приложении.
+4. В файле _“godot_example / src / main.gd”_ в параметре "PRODUCT_IDS" перечислите `productIds` - [подписки](https://www.rustore.ru/help/developers/monetization/create-app-subscription/) и [разовые покупки](https://www.rustore.ru/help/developers/monetization/create-paid-product-in-application/) доступные в вашем приложении.
 
 5. Выполните установку шаблона сборки Android (Проект → Установить шаблон сборки Android...).
 
@@ -59,7 +59,7 @@
 
 9. Настройте раздел “Хранилище ключей”, указав расположение и параметры ранее подготовленного файла `*.keystore`.
 
-10. Настройте раздел “Пакет”, указав `applicationId` в поле `Уникальное Имя`.
+10. Настройте раздел “Пакет”, указав `applicationId` в поле “Уникальное Имя”.
 
 11. Выполните сборку проекта командой “Экспорт проекта...” и проверьте работу приложения.
 
