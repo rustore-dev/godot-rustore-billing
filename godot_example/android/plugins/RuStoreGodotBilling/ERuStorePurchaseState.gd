@@ -8,5 +8,6 @@ enum Item {
 	CANCELLED,
 	CONSUMED,
 	CLOSED,
+	PAUSED,
 	TERMINATED
 }

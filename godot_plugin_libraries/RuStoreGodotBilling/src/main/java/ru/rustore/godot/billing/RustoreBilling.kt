@@ -2,7 +2,6 @@ package ru.rustore.godot.billing
 
 import android.content.Intent
 import android.util.ArraySet
-import android.util.Log
 import com.google.gson.Gson
 import org.godotengine.godot.Dictionary
 import org.godotengine.godot.Godot
@@ -11,18 +10,10 @@ import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 import ru.rustore.sdk.billingclient.RuStoreBillingClient
 import ru.rustore.sdk.billingclient.RuStoreBillingClientFactory
-import ru.rustore.sdk.billingclient.model.product.Product
-import ru.rustore.sdk.billingclient.model.purchase.PaymentResult
-import ru.rustore.sdk.billingclient.model.purchase.Purchase
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
-import ru.rustore.sdk.core.tasks.OnCompleteListener
 
 class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
     private companion object {
-        const val CANCELLED = "cancelled"
-        const val SUCCESS = "success"
-        const val FAILURE = "failure"
-
         const val CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS = "rustore_check_purchases_available_success"
         const val CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE = "rustore_check_purchases_available_failure"
         const val CHANNEL_ON_GET_PRODUCTS_SUCCESS = "rustore_on_get_products_success"
@@ -85,28 +76,25 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
     fun checkPurchasesAvailability() {
         client?.let {
             it.purchases.checkPurchasesAvailability()
-                .addOnCompleteListener(object : OnCompleteListener<FeatureAvailabilityResult> {
-                    override fun onSuccess(result: FeatureAvailabilityResult) {
-                        when (result) {
-                            is FeatureAvailabilityResult.Available -> {
-                                emitSignal(
-                                    CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS,
-                                    "{\"isAvailable\": true, \"detailMessage\": \"\"}"
-                                )
-                            }
-                            is FeatureAvailabilityResult.Unavailable -> {
-                                emitSignal(
-                                    CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS,
-                                    "{\"isAvailable\": false, \"detailMessage\": \"${result.cause.message}\"}"
-                                )
-                            }
+                .addOnSuccessListener { result ->
+                    when (result) {
+                        is FeatureAvailabilityResult.Available -> {
+                            emitSignal(
+                                CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS,
+                                "{\"isAvailable\": true, \"detailMessage\": \"\"}"
+                            )
+                        }
+                        is FeatureAvailabilityResult.Unavailable -> {
+                            emitSignal(
+                                CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS,
+                                "{\"isAvailable\": false, \"detailMessage\": \"${result.cause.message}\"}"
+                            )
                         }
                     }
-
-                    override fun onFailure(throwable: Throwable) {
-                        emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE, gson.toJson(throwable))
-                    }
-                })
+                }
+                .addOnFailureListener { throwable ->
+                    emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE, gson.toJson(throwable))
+                }
         }
     }
 
@@ -115,15 +103,13 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
         client?.let {
             it.products.getProducts(
                 productIds = productIds.asList()
-            ).addOnCompleteListener(object : OnCompleteListener<List<Product>> {
-                override fun onSuccess(result: List<Product>) {
+            )
+                .addOnSuccessListener { result ->
                     emitSignal(CHANNEL_ON_GET_PRODUCTS_SUCCESS, gson.toJson(result))
                 }
-
-                override fun onFailure(throwable: Throwable) {
+                .addOnFailureListener { throwable ->
                     emitSignal(CHANNEL_ON_GET_PRODUCTS_FAILURE, gson.toJson(throwable))
                 }
-            })
         }
     }
 
@@ -134,22 +120,19 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
         val payload = params["payload"]?.toString()
 
         client?.let {
-            Log.w("ssss", productId)
             it.purchases.purchaseProduct(
                 productId = productId,
                 orderId = orderId,
                 quantity = quantity,
                 developerPayload = payload
-            ).addOnCompleteListener(object : OnCompleteListener<PaymentResult> {
-                override fun onSuccess(result: PaymentResult) {
+            )
+                .addOnSuccessListener { result ->
                     val json = """{"type":"${result.javaClass.simpleName}","data":${gson.toJson(result)}}"""
                     emitSignal(CHANNEL_ON_PURCHASE_PRODUCT_SUCCESS, json)
                 }
-
-                override fun onFailure(throwable: Throwable) {
+                .addOnFailureListener { throwable ->
                     emitSignal(CHANNEL_ON_PURCHASE_PRODUCT_FAILURE, gson.toJson(throwable))
                 }
-            })
         }
     }
 
@@ -157,49 +140,38 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
     fun getPurchases() {
         client?.let {
             it.purchases.getPurchases()
-                .addOnCompleteListener(object : OnCompleteListener<List<Purchase>> {
-                    override fun onSuccess(result: List<Purchase>) {
-                        emitSignal(CHANNEL_ON_GET_PURCHASES_SUCCESS, gson.toJson(result))
-                    }
-
-                    override fun onFailure(throwable: Throwable) {
-                        emitSignal(CHANNEL_ON_GET_PURCHASES_FAILURE, gson.toJson(throwable))
-                    }
-                })
+                .addOnSuccessListener { result ->
+                    emitSignal(CHANNEL_ON_GET_PURCHASES_SUCCESS, gson.toJson(result))
+                }
+                .addOnFailureListener { throwable ->
+                    emitSignal(CHANNEL_ON_GET_PURCHASES_FAILURE, gson.toJson(throwable))
+                }
         }
     }
 
     @UsedByGodot
     fun confirmPurchase(purchaseId: String) {
         client?.let {
-            it.purchases.confirmPurchase(
-                purchaseId = purchaseId
-            ).addOnCompleteListener(object : OnCompleteListener<Unit> {
-                override fun onSuccess(result: Unit) {
+            it.purchases.confirmPurchase(purchaseId)
+                .addOnSuccessListener {
                     emitSignal(CHANNEL_ON_CONFIRM_PURCHASE_SUCCESS, purchaseId)
                 }
-
-                override fun onFailure(throwable: Throwable) {
+                .addOnFailureListener { throwable ->
                     emitSignal(CHANNEL_ON_CONFIRM_PURCHASE_FAILURE, purchaseId, gson.toJson(throwable))
                 }
-            })
         }
     }
 
     @UsedByGodot
     fun deletePurchase(purchaseId: String) {
         client?.let {
-            it.purchases.deletePurchase(
-                purchaseId = purchaseId
-            ).addOnCompleteListener(object : OnCompleteListener<Unit> {
-                override fun onSuccess(result: Unit) {
+            it.purchases.deletePurchase(purchaseId)
+                .addOnSuccessListener {
                     emitSignal(CHANNEL_ON_DELETE_PURCHASE_SUCCESS, purchaseId)
                 }
-
-                override fun onFailure(throwable: Throwable) {
+                .addOnFailureListener { throwable ->
                     emitSignal(CHANNEL_ON_DELETE_PURCHASE_FAILURE, purchaseId, gson.toJson(throwable))
                 }
-            })
         }
     }
 
@@ -207,15 +179,12 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
     fun getPurchaseInfo(purchaseId: String) {
         client?.let {
             it.purchases.getPurchaseInfo(purchaseId)
-                .addOnCompleteListener(object : OnCompleteListener<Purchase> {
-                    override fun onSuccess(result: Purchase) {
-                        emitSignal(CHANNEL_ON_GET_PURCHASE_INFO_SUCCESS, gson.toJson(result))
-                    }
-
-                    override fun onFailure(throwable: Throwable) {
-                        emitSignal(CHANNEL_ON_GET_PURCHASE_INFO_FAILURE, purchaseId, gson.toJson(throwable))
-                    }
-                })
+                .addOnSuccessListener { result ->
+                    emitSignal(CHANNEL_ON_GET_PURCHASE_INFO_SUCCESS, gson.toJson(result))
+                }
+                .addOnFailureListener { throwable ->
+                    emitSignal(CHANNEL_ON_GET_PURCHASE_INFO_FAILURE, purchaseId, gson.toJson(throwable))
+                }
         }
     }
 
