@@ -1,8 +1,7 @@
 ext {
     rustore_core_version = '1.0.0'
-    rustore_billingclient_version = '3.1.0'
-    //rustore_sdk_type = ''
-    rustore_sdk_type = '-QA'
+    rustore_billingclient_version = '5.+'
+    rustore_sdk_type = ''
     sdk_version_code = 1
     rustore_qa_dir = "${rootProject.projectDir}/../QA"
 }
