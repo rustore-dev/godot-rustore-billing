@@ -37,7 +37,7 @@ func _ready():
 	_billing_client.on_get_purchase_info_success.connect(_on_get_purchase_info_success)
 	_billing_client.on_get_purchase_info_failure.connect(_on_get_purchase_info_failure)
 	_billing_client.init(APPLICATION_ID, DEEPLINK_SCHEME)
-	_billing_client.setTheme(0)
+	_billing_client.setTheme(ERuStoreTheme.Item.DARK)
 
 
 # Check purchase availability
