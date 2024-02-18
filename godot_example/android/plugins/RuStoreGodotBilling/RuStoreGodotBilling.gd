@@ -31,7 +31,12 @@ static func get_instance() -> RuStoreGodotBillingClient:
 	return _instance
 
 
-func init(consoleApplicationId: String, deeplinkScheme: String):
+func init(
+		consoleApplicationId: String,
+		deeplinkScheme: String,
+		debugLogs: bool = false,
+		externalPaymentLogger: bool = false
+	):
 	_core_client = RuStoreGodotCoreUtils.get_instance()
 	
 	if _isInitialized == false && Engine.has_singleton(SINGLETON_NAME):
@@ -51,12 +56,15 @@ func init(consoleApplicationId: String, deeplinkScheme: String):
 		_clientWrapper.rustore_on_get_purchase_info_success.connect(_on_get_purchase_info_success)
 		_clientWrapper.rustore_on_get_purchase_info_failure.connect(_on_get_purchase_info_failure)
 		
-		_clientWrapper.init(consoleApplicationId, deeplinkScheme)
+		_clientWrapper.init(consoleApplicationId, deeplinkScheme, debugLogs, externalPaymentLogger)
 		_isInitialized = true
 
 
 # Theme switcher
 func setTheme(themeCode: int):
+	_clientWrapper.setTheme(themeCode)
+
+func set_theme(themeCode: int):
 	_clientWrapper.setTheme(themeCode)
 
 
