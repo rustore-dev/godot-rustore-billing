@@ -10,9 +10,10 @@ import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 import ru.rustore.sdk.billingclient.RuStoreBillingClient
 import ru.rustore.sdk.billingclient.RuStoreBillingClientFactory
+import ru.rustore.sdk.billingclient.provider.logger.ExternalPaymentLogger
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 
-class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
+class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLogger {
     private companion object {
         const val CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS = "rustore_check_purchases_available_success"
         const val CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE = "rustore_check_purchases_available_failure"
@@ -28,6 +29,11 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
         const val CHANNEL_ON_DELETE_PURCHASE_FAILURE = "rustore_on_delete_purchase_failure"
         const val CHANNEL_ON_GET_PURCHASE_INFO_SUCCESS = "rustore_on_get_purchase_info_success"
         const val CHANNEL_ON_GET_PURCHASE_INFO_FAILURE = "rustore_on_get_purchase_info_failure"
+        const val CHANNEL_ON_PAYMENT_LOGGER_DEBUG = "rustore_on_payment_logger_debug"
+        const val CHANNEL_ON_PAYMENT_LOGGER_ERROR = "rustore_on_payment_logger_error"
+        const val CHANNEL_ON_PAYMENT_LOGGER_INFO = "rustore_on_payment_logger_info"
+        const val CHANNEL_ON_PAYMENT_LOGGER_VERBOSE = "rustore_on_payment_logger_verbose"
+        const val CHANNEL_ON_PAYMENT_LOGGER_WARNING = "rustore_on_payment_logger_warning"
     }
 
     override fun getPluginName(): String {
@@ -50,24 +56,32 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
         signals.add(SignalInfo(CHANNEL_ON_DELETE_PURCHASE_FAILURE, String::class.java, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_GET_PURCHASE_INFO_SUCCESS, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_GET_PURCHASE_INFO_FAILURE, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_DEBUG, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_ERROR, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_INFO, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_VERBOSE, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_WARNING, String::class.java, String::class.java))
 
         return signals
     }
 
     private var client: RuStoreBillingClient? = null
     private val gson = Gson()
+    private var tag: String = ""
 
     @UsedByGodot
-    fun init(id: String, scheme: String) {
-        godot.getActivity()?.run {
+    fun init(id: String, scheme: String, debugLogs: Boolean, externalPaymentLogger: Boolean) {
+        godot.getActivity()?.let { activity ->
             client = RuStoreBillingClientFactory.create(
-                context = application,
+                context = activity.application,
                 consoleApplicationId = id,
                 deeplinkScheme = scheme,
                 internalConfig = mapOf(
                     "type" to "godot"
                 ),
-                themeProvider = RuStoreBillingClientThemeProviderImpl
+                themeProvider = RuStoreBillingClientThemeProviderImpl,
+                debugLogs = debugLogs,
+                externalPaymentLoggerFactory = if (externalPaymentLogger) { tag -> this.tag = tag; this } else null
             )
         }
     }
@@ -199,5 +213,25 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot) {
         if (data != null) {
             client!!.onNewIntent(data)
         }
+    }
+
+    override fun d(e: Throwable?, message: () -> String) {
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_DEBUG, gson.toJson(e) ?: String(), message)
+    }
+
+    override fun e(e: Throwable?, message: () -> String) {
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_ERROR, gson.toJson(e) ?: String(), message)
+    }
+
+    override fun i(e: Throwable?, message: () -> String) {
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_INFO, gson.toJson(e) ?: String(), message)
+    }
+
+    override fun v(e: Throwable?, message: () -> String) {
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_VERBOSE, gson.toJson(e) ?: String(), message)
+    }
+
+    override fun w(e: Throwable?, message: () -> String) {
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_WARNING, gson.toJson(e) ?: String(), message)
     }
 }
