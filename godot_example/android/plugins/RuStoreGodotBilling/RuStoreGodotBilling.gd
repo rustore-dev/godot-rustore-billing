@@ -21,6 +21,11 @@ signal on_delete_purchase_success
 signal on_delete_purchase_failure
 signal on_get_purchase_info_success
 signal on_get_purchase_info_failure
+signal on_payment_logger_debug
+signal on_payment_logger_error
+signal on_payment_logger_info
+signal on_payment_logger_verbose
+signal on_payment_logger_warning
 
 static var _instance: RuStoreGodotBillingClient = null
 
@@ -34,8 +39,7 @@ static func get_instance() -> RuStoreGodotBillingClient:
 func init(
 		consoleApplicationId: String,
 		deeplinkScheme: String,
-		debugLogs: bool = false,
-		externalPaymentLogger: bool = false
+		debugLogs: bool = false
 	):
 	_core_client = RuStoreGodotCoreUtils.get_instance()
 	
@@ -55,9 +59,22 @@ func init(
 		_clientWrapper.rustore_on_delete_purchase_failure.connect(_on_delete_purchase_failure)
 		_clientWrapper.rustore_on_get_purchase_info_success.connect(_on_get_purchase_info_success)
 		_clientWrapper.rustore_on_get_purchase_info_failure.connect(_on_get_purchase_info_failure)
+		_clientWrapper.rustore_on_payment_logger_debug.connect(_on_payment_logger_debug)
+		_clientWrapper.rustore_on_payment_logger_error.connect(_on_payment_logger_error)
+		_clientWrapper.rustore_on_payment_logger_info.connect(_on_payment_logger_info)
+		_clientWrapper.rustore_on_payment_logger_verbose.connect(_on_payment_logger_verbose)
+		_clientWrapper.rustore_on_payment_logger_warning.connect(_on_payment_logger_warning)
 		
-		_clientWrapper.init(consoleApplicationId, deeplinkScheme, debugLogs, externalPaymentLogger)
+		_clientWrapper.init(consoleApplicationId, deeplinkScheme, debugLogs)
 		_isInitialized = true
+
+
+# Error processing
+func set_error_handling(value: bool):
+	_clientWrapper.setErrorHandling(value)
+
+func get_error_handling() -> bool:
+	return _clientWrapper.getErrorHandling()
 
 
 # Theme switcher
@@ -129,8 +146,8 @@ func _on_get_purchases_failure(data: String):
 
 
 # Confirm purchase
-func confirm_purchase(purchase_id: String):
-	_clientWrapper.confirmPurchase(purchase_id)
+func confirm_purchase(purchase_id: String, developer_payload: String = ""):
+	_clientWrapper.confirmPurchase(purchase_id, developer_payload)
 
 func _on_confirm_purchase_success(purchase_id: String):
 	on_confirm_purchase_success.emit(purchase_id)
@@ -163,3 +180,25 @@ func _on_get_purchase_info_success(data: String):
 func _on_get_purchase_info_failure(purchase_id: String, data: String):
 	var obj = RuStoreError.new(data)
 	on_get_purchase_info_failure.emit(purchase_id, obj)
+
+
+# Debug logs
+func _on_payment_logger_debug(data: String, message: String, tag: String):
+	var obj = RuStoreError.new(data)
+	on_payment_logger_debug.emit(obj, message, tag)
+
+func _on_payment_logger_error(data: String, message: String, tag: String):
+	var obj = RuStoreError.new(data)
+	on_payment_logger_error.emit(obj, message, tag)
+
+func _on_payment_logger_info(data: String, message: String, tag: String):
+	var obj = RuStoreError.new(data)
+	on_payment_logger_info.emit(obj, message, tag)
+
+func _on_payment_logger_verbose(data: String, message: String, tag: String):
+	var obj = RuStoreError.new(data)
+	on_payment_logger_verbose.emit(obj, message, tag)
+
+func _on_payment_logger_warning(data: String, message: String, tag: String):
+	var obj = RuStoreError.new(data)
+	on_payment_logger_warning.emit(obj, message, tag)

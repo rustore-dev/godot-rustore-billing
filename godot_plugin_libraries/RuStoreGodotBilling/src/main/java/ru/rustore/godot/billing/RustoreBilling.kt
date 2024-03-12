@@ -8,9 +8,12 @@ import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
+import ru.rustore.godot.core.JsonBuilder
 import ru.rustore.sdk.billingclient.RuStoreBillingClient
 import ru.rustore.sdk.billingclient.RuStoreBillingClientFactory
 import ru.rustore.sdk.billingclient.provider.logger.ExternalPaymentLogger
+import ru.rustore.sdk.billingclient.utils.resolveForBilling
+import ru.rustore.sdk.core.exception.RuStoreException
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 
 class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLogger {
@@ -56,11 +59,11 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
         signals.add(SignalInfo(CHANNEL_ON_DELETE_PURCHASE_FAILURE, String::class.java, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_GET_PURCHASE_INFO_SUCCESS, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_GET_PURCHASE_INFO_FAILURE, String::class.java, String::class.java))
-        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_DEBUG, String::class.java, String::class.java))
-        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_ERROR, String::class.java, String::class.java))
-        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_INFO, String::class.java, String::class.java))
-        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_VERBOSE, String::class.java, String::class.java))
-        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_WARNING, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_DEBUG, String::class.java, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_ERROR, String::class.java, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_INFO, String::class.java, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_VERBOSE, String::class.java, String::class.java, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_PAYMENT_LOGGER_WARNING, String::class.java, String::class.java, String::class.java))
 
         return signals
     }
@@ -68,9 +71,28 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
     private var client: RuStoreBillingClient? = null
     private val gson = Gson()
     private var tag: String = ""
+    private var allowErrorHandling: Boolean = false
 
     @UsedByGodot
-    fun init(id: String, scheme: String, debugLogs: Boolean, externalPaymentLogger: Boolean) {
+    fun setErrorHandling(allowErrorHandling: Boolean) {
+        this.allowErrorHandling = allowErrorHandling
+    }
+
+    @UsedByGodot
+    fun getErrorHandling() : Boolean {
+        return allowErrorHandling
+    }
+
+    private fun handleError(throwable: Throwable) {
+        godot.getActivity()?.let { activity ->
+            if (allowErrorHandling && throwable is RuStoreException) {
+                throwable.resolveForBilling(activity)
+            }
+        }
+    }
+
+    @UsedByGodot
+    fun init(id: String, scheme: String, debugLogs: Boolean) {
         godot.getActivity()?.let { activity ->
             client = RuStoreBillingClientFactory.create(
                 context = activity.application,
@@ -81,48 +103,45 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
                 ),
                 themeProvider = RuStoreBillingClientThemeProviderImpl,
                 debugLogs = debugLogs,
-                externalPaymentLoggerFactory = if (externalPaymentLogger) { tag -> this.tag = tag; this } else null
+                externalPaymentLoggerFactory = if (debugLogs) { tag -> this.tag = tag; this } else null
             )
         }
     }
 
     @UsedByGodot
     fun checkPurchasesAvailability() {
-        client?.let {
-            it.purchases.checkPurchasesAvailability()
+        client?.run {
+            purchases.checkPurchasesAvailability()
                 .addOnSuccessListener { result ->
                     when (result) {
                         is FeatureAvailabilityResult.Available -> {
-                            emitSignal(
-                                CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS,
-                                "{\"isAvailable\": true, \"detailMessage\": \"\"}"
-                            )
+                            emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, """{"isAvailable": true}""")
                         }
                         is FeatureAvailabilityResult.Unavailable -> {
-                            emitSignal(
-                                CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS,
-                                "{\"isAvailable\": false, \"detailMessage\": \"${result.cause.message}\"}"
-                            )
+                            val cause = JsonBuilder.toJson(result.cause)
+                            val json = """{"isAvailable": false, "cause": $cause}"""
+                            handleError(result.cause)
+                            emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, json)
                         }
                     }
                 }
                 .addOnFailureListener { throwable ->
-                    emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE, gson.toJson(throwable))
+                    handleError(throwable)
+                    emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE, JsonBuilder.toJson(throwable))
                 }
         }
     }
 
     @UsedByGodot
     fun getProducts(productIds: Array<String>) {
-        client?.let {
-            it.products.getProducts(
-                productIds = productIds.asList()
-            )
+        client?.run {
+            products.getProducts(productIds.asList())
                 .addOnSuccessListener { result ->
                     emitSignal(CHANNEL_ON_GET_PRODUCTS_SUCCESS, gson.toJson(result))
                 }
                 .addOnFailureListener { throwable ->
-                    emitSignal(CHANNEL_ON_GET_PRODUCTS_FAILURE, gson.toJson(throwable))
+                    handleError(throwable)
+                    emitSignal(CHANNEL_ON_GET_PRODUCTS_FAILURE, JsonBuilder.toJson(throwable))
                 }
         }
     }
@@ -133,8 +152,8 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
         val quantity = params["quantity"] as? Int
         val payload = params["payload"]?.toString()
 
-        client?.let {
-            it.purchases.purchaseProduct(
+        client?.run {
+            purchases.purchaseProduct(
                 productId = productId,
                 orderId = orderId,
                 quantity = quantity,
@@ -145,59 +164,64 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
                     emitSignal(CHANNEL_ON_PURCHASE_PRODUCT_SUCCESS, json)
                 }
                 .addOnFailureListener { throwable ->
-                    emitSignal(CHANNEL_ON_PURCHASE_PRODUCT_FAILURE, gson.toJson(throwable))
+                    handleError(throwable)
+                    emitSignal(CHANNEL_ON_PURCHASE_PRODUCT_FAILURE, JsonBuilder.toJson(throwable))
                 }
         }
     }
 
     @UsedByGodot
     fun getPurchases() {
-        client?.let {
-            it.purchases.getPurchases()
+        client?.run {
+            purchases.getPurchases()
                 .addOnSuccessListener { result ->
                     emitSignal(CHANNEL_ON_GET_PURCHASES_SUCCESS, gson.toJson(result))
                 }
                 .addOnFailureListener { throwable ->
-                    emitSignal(CHANNEL_ON_GET_PURCHASES_FAILURE, gson.toJson(throwable))
+                    handleError(throwable)
+                    emitSignal(CHANNEL_ON_GET_PURCHASES_FAILURE, JsonBuilder.toJson(throwable))
                 }
         }
     }
 
     @UsedByGodot
-    fun confirmPurchase(purchaseId: String) {
-        client?.let {
-            it.purchases.confirmPurchase(purchaseId)
+    fun confirmPurchase(purchaseId: String, developerPayload: String) {
+        client?.run {
+            purchases.confirmPurchase(purchaseId, developerPayload)
                 .addOnSuccessListener {
                     emitSignal(CHANNEL_ON_CONFIRM_PURCHASE_SUCCESS, purchaseId)
                 }
                 .addOnFailureListener { throwable ->
-                    emitSignal(CHANNEL_ON_CONFIRM_PURCHASE_FAILURE, purchaseId, gson.toJson(throwable))
+                    handleError(throwable)
+                    emitSignal(CHANNEL_ON_CONFIRM_PURCHASE_FAILURE, purchaseId, JsonBuilder.toJson(throwable))
                 }
         }
     }
 
     @UsedByGodot
     fun deletePurchase(purchaseId: String) {
-        client?.let {
-            it.purchases.deletePurchase(purchaseId)
+        client?.run {
+            purchases.deletePurchase(purchaseId)
                 .addOnSuccessListener {
                     emitSignal(CHANNEL_ON_DELETE_PURCHASE_SUCCESS, purchaseId)
                 }
                 .addOnFailureListener { throwable ->
-                    emitSignal(CHANNEL_ON_DELETE_PURCHASE_FAILURE, purchaseId, gson.toJson(throwable))
+                    handleError(throwable)
+                    emitSignal(CHANNEL_ON_DELETE_PURCHASE_FAILURE, purchaseId, JsonBuilder.toJson(throwable))
                 }
         }
     }
 
     @UsedByGodot
     fun getPurchaseInfo(purchaseId: String) {
-        client?.let {
-            it.purchases.getPurchaseInfo(purchaseId)
+        client?.run {
+            purchases.getPurchaseInfo(purchaseId)
                 .addOnSuccessListener { result ->
                     emitSignal(CHANNEL_ON_GET_PURCHASE_INFO_SUCCESS, gson.toJson(result))
                 }
                 .addOnFailureListener { throwable ->
-                    emitSignal(CHANNEL_ON_GET_PURCHASE_INFO_FAILURE, purchaseId, gson.toJson(throwable))
+                    handleError(throwable)
+                    emitSignal(CHANNEL_ON_GET_PURCHASE_INFO_FAILURE, purchaseId, JsonBuilder.toJson(throwable))
                 }
         }
     }
@@ -211,27 +235,27 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
         super.onMainActivityResult(requestCode, resultCode, data)
 
         if (data != null) {
-            client!!.onNewIntent(data)
+            client?.onNewIntent(data)
         }
     }
 
     override fun d(e: Throwable?, message: () -> String) {
-        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_DEBUG, gson.toJson(e) ?: String(), message)
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_DEBUG, gson.toJson(e) ?: String(), message, tag)
     }
 
     override fun e(e: Throwable?, message: () -> String) {
-        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_ERROR, gson.toJson(e) ?: String(), message)
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_ERROR, gson.toJson(e) ?: String(), message, tag)
     }
 
     override fun i(e: Throwable?, message: () -> String) {
-        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_INFO, gson.toJson(e) ?: String(), message)
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_INFO, gson.toJson(e) ?: String(), message, tag)
     }
 
     override fun v(e: Throwable?, message: () -> String) {
-        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_VERBOSE, gson.toJson(e) ?: String(), message)
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_VERBOSE, gson.toJson(e) ?: String(), message, tag)
     }
 
     override fun w(e: Throwable?, message: () -> String) {
-        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_WARNING, gson.toJson(e) ?: String(), message)
+        emitSignal(CHANNEL_ON_PAYMENT_LOGGER_WARNING, gson.toJson(e) ?: String(), message, tag)
     }
 }
