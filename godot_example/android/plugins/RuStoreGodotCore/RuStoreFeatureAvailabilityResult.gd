@@ -1,13 +1,13 @@
 class_name RuStoreFeatureAvailabilityResult extends Object
 
-var isAvailable: bool
-var cause: RuStoreError
+var isAvailable: bool = false
+var cause: RuStoreError = null
 
 func _init(json: String = ""):
-	if json == "":
-		isAvailable = false
-		cause = RuStoreError.new()
-	else:
+	if json != "":
 		var obj = JSON.parse_string(json)
 		isAvailable = obj["isAvailable"]
-		cause = RuStoreError.new(json)
+		
+		if obj.has("cause"):
+			var jcause = JSON.stringify(obj["cause"])
+			cause = RuStoreError.new(jcause)
