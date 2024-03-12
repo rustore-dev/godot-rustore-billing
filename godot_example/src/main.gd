@@ -2,8 +2,6 @@ extends Node2D
 
 @onready var _products_list = $CanvasLayer/VBoxContainer/TabContainer/Products/Products/ProductsList
 @onready var _purchases_list = $CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases/PurchasesList
-@onready var closeAvailabilityButton = $CanvasLayer/Availability/CloseAvailable
-@onready var closeInfoButton = $CanvasLayer/PurchaseInfo/CloseInfo
 
 const APPLICATION_ID = "184062"
 const DEEPLINK_SCHEME = "example"
@@ -36,8 +34,15 @@ func _ready():
 	_billing_client.on_delete_purchase_failure.connect(_on_delete_purchase_failure)
 	_billing_client.on_get_purchase_info_success.connect(_on_get_purchase_info_success)
 	_billing_client.on_get_purchase_info_failure.connect(_on_get_purchase_info_failure)
-	_billing_client.init(APPLICATION_ID, DEEPLINK_SCHEME)
-	_billing_client.setTheme(ERuStoreTheme.Item.DARK)
+	_billing_client.on_payment_logger_debug.connect(_on_payment_logger_debug)
+	_billing_client.on_payment_logger_error.connect(_on_payment_logger_error)
+	_billing_client.on_payment_logger_info.connect(_on_payment_logger_info)
+	_billing_client.on_payment_logger_verbose.connect(_on_payment_logger_verbose)
+	_billing_client.on_payment_logger_warning.connect(_on_payment_logger_warning)
+	
+	_billing_client.set_error_handling(true)
+	_billing_client.init(APPLICATION_ID, DEEPLINK_SCHEME, false)
+	_billing_client.set_theme(ERuStoreTheme.Item.DARK)
 
 
 # Check purchase availability
@@ -47,8 +52,6 @@ func _on_check_purchases_availability_button_pressed():
 func _on_check_purchases_availability_success(result: RuStoreFeatureAvailabilityResult):
 	if result.isAvailable:
 		_core_client.show_toast("Purchases are available")
-	else:
-		_core_client.show_toast("Purchases are not available. Cause: " + result.cause.description)
 
 func _on_check_purchases_availability_failure(error: RuStoreError):
 	_core_client.show_toast(error.description)
@@ -114,7 +117,7 @@ func _on_get_purchases_failure(error: RuStoreError):
 
 # Confirm purchase
 func _on_confirm_purchase_pressed(purchase: RuStorePurchase):
-	_billing_client.confirm_purchase(purchase.purchaseId)
+	_billing_client.confirm_purchase(purchase.purchaseId, purchase.developerPayload)
 
 func _on_confirm_purchase_success(purchase_id: String):
 	_billing_client.get_purchases()
@@ -145,3 +148,20 @@ func _on_get_purchase_info_success(purchase: RuStorePurchase):
 
 func _on_get_purchase_info_failure(purchase_id: String, error: RuStoreError):
 	_core_client.show_toast(purchase_id + " " + error.description)
+
+
+# Debug logs
+func _on_payment_logger_debug(error: RuStoreError, message: String, tag: String):
+	_core_client.show_toast(tag + ": " + message)
+
+func _on_payment_logger_error(error: RuStoreError, message: String, tag: String):
+	_core_client.show_toast(tag + ": " + message)
+	
+func _on_payment_logger_info(error: RuStoreError, message: String, tag: String):
+	_core_client.show_toast(tag + ": " + message)
+	
+func _on_payment_logger_verbose(error: RuStoreError, message: String, tag: String):
+	_core_client.show_toast(tag + ": " + message)
+	
+func _on_payment_logger_warning(error: RuStoreError, message: String, tag: String):
+	_core_client.show_toast(tag + ": " + message)
