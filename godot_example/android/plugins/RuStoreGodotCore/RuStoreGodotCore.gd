@@ -34,3 +34,27 @@ func copy_to_clipboard(data: String):
 
 func get_from_clipboard() -> String:
 	return _clientWrapper.getFromClipboard()
+
+
+func get_string_resources(name: String) -> String:
+	return _clientWrapper.getStringResources(name)
+
+
+func get_int_resources(name: String) -> int:
+	return _clientWrapper.getIntResources(name)
+
+
+func get_string_shared_preferences(storageName: String, key: String, defaultValue: String) -> String:
+	return _clientWrapper.getStringSharedPreferences(storageName, key, defaultValue)
+
+
+func get_int_shared_preferences(storageName: String, key: String, defaultValue: int) -> int:
+	return _clientWrapper.getIntSharedPreferences(storageName, key, defaultValue)
+
+
+func set_string_shared_preferences(storageName: String, key: String, value: String):
+	_clientWrapper.setStringSharedPreferences(storageName, key, value)
+
+
+func set_int_shared_preferences(storageName: String, key: String, value: int):
+	_clientWrapper.setIntSharedPreferences(storageName, key, value)
