@@ -11,14 +11,14 @@ class Success extends RuStorePaymentResult:
 		if json != "":
 			var obj = JSON.parse_string(json)
 			if obj.has("orderId"):
-				purchaseId = obj["orderId"]
+				orderId = obj["orderId"]
 				
 			purchaseId = obj["purchaseId"]
 			productId = obj["productId"]
 			invoiceId = obj["invoiceId"]
 			
 			if obj.has("subscriptionToken"):
-				purchaseId = obj["subscriptionToken"]
+				subscriptionToken = obj["subscriptionToken"]
 
 
 class Cancelled extends RuStorePaymentResult:
