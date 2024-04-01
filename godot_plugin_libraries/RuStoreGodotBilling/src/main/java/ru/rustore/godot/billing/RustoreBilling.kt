@@ -1,8 +1,9 @@
 package ru.rustore.godot.billing
 
 import android.content.Intent
+import android.net.Uri
 import android.util.ArraySet
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import org.godotengine.godot.Dictionary
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -69,7 +70,9 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
     }
 
     private var client: RuStoreBillingClient? = null
-    private val gson = Gson()
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(Uri::class.java, UriTypeAdapter())
+        .create()
     private var tag: String = ""
     private var allowErrorHandling: Boolean = false
 

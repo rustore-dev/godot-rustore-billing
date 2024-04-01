@@ -42,10 +42,10 @@ func _init(json: String = ""):
 			description = obj.get("description")
 		
 		if obj.has("imageUrl"):
-			imageUrl = ""#obj["imageUrl"]
+			imageUrl = obj["imageUrl"]
 		
 		if obj.has("promoImageUrl"):
-			promoImageUrl = ""#obj["promoImageUrl"]
+			promoImageUrl = obj["promoImageUrl"]
 		
 		if obj.has("subscription"):
 			subscription = RuStoreProductSubscription.new(str(obj["subscription"]))
