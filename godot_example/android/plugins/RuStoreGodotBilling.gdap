@@ -1,0 +1,7 @@
+[config]
+name="RuStoreGodotBilling"
+binary_type="local"
+binary="RuStoreGodotBilling/RuStoreGodotBilling.aar"
+
+[dependencies]
+remote=["ru.rustore.sdk:billingclient:5.+"]
