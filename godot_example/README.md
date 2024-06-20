@@ -42,27 +42,27 @@
 
 Для проверки работы приложения вы можете воспользоваться функционалом [тестовых платежей](https://www.rustore.ru/help/developers/monetization/sandbox).
 
-1. Выполните шаги раздела [“Сборка плагина”](../README.md). Собранные файлы (.aar и .gdap) будут автоматически скопированы в проект-пример.
+> ⚠️ Библиотеки плагинов в репозитории собраны для Godot Engine 4.2.1. Если вы используете другую версию Godot Engine, выполните шаги раздела [_"Пересборка плагина"_](../README.md).
 
-2. Откройте godot проект в папке _“godot_example”_.
+1. Откройте godot проект в папке _“godot_example”_.
 
-3. В файле _“godot_example / src / main.gd”_ в параметре "APPLICATION_ID" укажите `consoleApplicationId` - код приложения из консоли разработчика RuStore.
+2. В файле _“godot_example / src / main.gd”_ в параметре "APPLICATION_ID" укажите `consoleApplicationId` - код приложения из консоли разработчика RuStore.
 
-4. В файле _“godot_example / src / main.gd”_ в параметре "PRODUCT_IDS" перечислите `productIds` - [подписки](https://www.rustore.ru/help/developers/monetization/create-app-subscription/) и [разовые покупки](https://www.rustore.ru/help/developers/monetization/create-paid-product-in-application/) доступные в вашем приложении.
+3. В файле _“godot_example / src / main.gd”_ в параметре "PRODUCT_IDS" перечислите `productIds` - [подписки](https://www.rustore.ru/help/developers/monetization/create-app-subscription/) и [разовые покупки](https://www.rustore.ru/help/developers/monetization/create-paid-product-in-application/) доступные в вашем приложении.
 
-5. Выполните установку шаблона сборки Android (Проект → Установить шаблон сборки Android...).
+4. Выполните установку шаблона сборки Android (Проект → Установить шаблон сборки Android...).
 
-6. Скопируйте с заменой содержимое папки _“godot_example / android / build_example”_ в папку _“godot_example / android / build”_.
+5. Скопируйте с заменой содержимое папки _“godot_example / android / build_example”_ в папку _“godot_example / android / build”_.
 
-7. Добавьте пресет сборки Android (Проект → Экспорт... → Добавить... → Android).
+6. Добавьте пресет сборки Android (Проект → Экспорт... → Добавить... → Android).
 
-8. В пресете сборки Android в списке "Плагины" отметьте плагины “Ru Store Godot Billing” и “Ru Store Godot Core”.
+7. В пресете сборки Android в списке "Плагины" отметьте плагины “Ru Store Godot Billing” и “Ru Store Godot Core”.
 
-9. Настройте раздел “Хранилище ключей”, указав расположение и параметры ранее подготовленного файла `*.keystore`.
+8. Настройте раздел “Хранилище ключей”, указав расположение и параметры ранее подготовленного файла `*.keystore`.
 
-10. Настройте раздел “Пакет”, указав `applicationId` в поле “Уникальное Имя”.
+9. Настройте раздел “Пакет”, указав `applicationId` в поле “Уникальное Имя”.
 
-11. Выполните сборку проекта командой “Экспорт проекта...” и проверьте работу приложения.
+10. Выполните сборку проекта командой “Экспорт проекта...” и проверьте работу приложения.
 
 
 ### Сценарий использования
