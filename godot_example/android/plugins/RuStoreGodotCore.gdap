@@ -1,0 +1,8 @@
+[config]
+name="RuStoreGodotCore"
+binary_type="local"
+binary="RuStoreGodotCore/RuStoreGodotCore.aar"
+
+[dependencies]
+custom_maven_repos=["https://artifactory-external.vkpartner.ru/artifactory/maven"]
+remote=["com.google.code.gson:gson:2.10.1"]

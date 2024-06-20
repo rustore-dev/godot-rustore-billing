@@ -17,5 +17,3 @@ mono_crash.*.json
 # Android builds ignores
 android/.build_version
 android/build/
-android/plugins/**/*.aar
-android/plugins/**/*.gdap
