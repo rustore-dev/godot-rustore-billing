@@ -6,16 +6,18 @@ class Success extends RuStorePaymentResult:
 	var productId: String = ""
 	var invoiceId: String = ""
 	var subscriptionToken: String = ""
+	var sandbox: bool = false
 	
 	func _init(json: String = ""):
 		if json != "":
 			var obj = JSON.parse_string(json)
 			if obj.has("orderId"):
 				orderId = obj["orderId"]
-				
+			
 			purchaseId = obj["purchaseId"]
 			productId = obj["productId"]
 			invoiceId = obj["invoiceId"]
+			sandbox = obj["sandbox"]
 			
 			if obj.has("subscriptionToken"):
 				subscriptionToken = obj["subscriptionToken"]
@@ -23,11 +25,13 @@ class Success extends RuStorePaymentResult:
 
 class Cancelled extends RuStorePaymentResult:
 	var purchaseId: String
+	var sandbox: bool = false
 	
 	func _init(json: String = ""):
 		if json != "":
 			var obj = JSON.parse_string(json)
-			purchaseId = obj["purchaseId"] 
+			purchaseId = obj["purchaseId"]
+			sandbox = obj["sandbox"]
 
 
 class Failure extends RuStorePaymentResult:
@@ -37,6 +41,7 @@ class Failure extends RuStorePaymentResult:
 	var quantity: int = 0
 	var productId: String = ""
 	var errorCode: int = 0
+	var sandbox: bool = false
 	
 	func _init(json: String = ""):
 		if json != "":
@@ -47,6 +52,7 @@ class Failure extends RuStorePaymentResult:
 			if obj.has("quantity"): quantity = int(obj["quantity"])
 			if obj.has("productId"): productId = obj["productId"]
 			if obj.has("errorCode"): errorCode = int(obj["errorCode"])
+			sandbox = obj["sandbox"]
 
 
 class InvalidPaymentState extends RuStorePaymentResult:
