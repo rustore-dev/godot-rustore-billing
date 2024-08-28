@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqdrak1ed880t"]
+[gd_scene load_steps=6 format=3 uid="uid://bqdrak1ed880t"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_2u3nm"]
 [ext_resource type="PackedScene" uid="uid://cp2nerfeejhfq" path="res://scenes/product.tscn" id="1_q2awq"]
 [ext_resource type="Theme" uid="uid://dvj4pjg1srxb3" path="res://theme.tres" id="2_r7fnr"]
 [ext_resource type="PackedScene" uid="uid://dknb2mp2tvcjx" path="res://scenes/purchase.tscn" id="4_to0yq"]
+[ext_resource type="Script" path="res://src/loading.gd" id="5_6kl2t"]
 
 [node name="shop" type="Node2D"]
 script = ExtResource("1_2u3nm")
@@ -90,6 +91,34 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
+[node name="LoadingPanel" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/LoadingPanel"]
+modulate = Color(0, 0.466667, 1, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -20.0
+offset_right = 100.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+value = 0.5
+show_percentage = false
+script = ExtResource("5_6kl2t")
+
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/CheckPurchasesAvailabilityButton" to="." method="_on_check_purchases_availability_button_pressed"]
+[connection signal="tab_clicked" from="CanvasLayer/VBoxContainer/TabContainer" to="." method="_on_tab_container_tab_clicked"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/TabContainer/Products/Products/UpdateProductsListButton" to="." method="_on_update_products_list_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases/UpdatePurchasesListButton" to="." method="_on_update_purchases_list_button_pressed"]
