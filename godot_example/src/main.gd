@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var _products_list = $CanvasLayer/VBoxContainer/TabContainer/Products/Products/ProductsList
 @onready var _purchases_list = $CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases/PurchasesList
+@onready var _loading = $CanvasLayer/LoadingPanel
 
 const APPLICATION_ID = "184062"
 const DEEPLINK_SCHEME = "example"
@@ -47,21 +48,34 @@ func _ready():
 
 # Check purchase availability
 func _on_check_purchases_availability_button_pressed():
+	_loading.visible = true
 	_billing_client.check_purchases_availability()
 
 func _on_check_purchases_availability_success(result: RuStoreFeatureAvailabilityResult):
+	_loading.visible = false
 	if result.isAvailable:
 		_core_client.show_toast("Purchases are available")
 
 func _on_check_purchases_availability_failure(error: RuStoreError):
+	_loading.visible = false
 	_core_client.show_toast(error.description)
+
+
+func _on_tab_container_tab_clicked(tab):
+	match tab:
+		0:
+			_on_update_products_list_button_pressed()
+		1:
+			_on_update_purchases_list_button_pressed()
 
 
 # Update products list
 func _on_update_products_list_button_pressed():
+	_loading.visible = true
 	_billing_client.get_products(PRODUCT_IDS)
 
 func _on_get_products_success(products: Array):
+	_loading.visible = false
 	for product_panel in _products_list.get_children():
 		product_panel.queue_free()
 	
@@ -72,6 +86,7 @@ func _on_get_products_success(products: Array):
 		product_panel.on_purchase_product_pressed.connect(_on_purchase_product_pressed)
 
 func _on_get_products_failure(error: RuStoreError):
+	_loading.visible = false
 	_core_client.show_toast(error.description)
 
 
@@ -97,9 +112,11 @@ func _on_purchase_product_failure(error: RuStoreError):
 
 # Update purchases list
 func _on_update_purchases_list_button_pressed():
+	_loading.visible = true
 	_billing_client.get_purchases()
 
 func _on_get_purchases_success(purchases: Array):
+	_loading.visible = false
 	for purchase_panel in _purchases_list.get_children():
 		purchase_panel.queue_free()
 
@@ -112,41 +129,51 @@ func _on_get_purchases_success(purchases: Array):
 		purchase_panel.on_get_purchase_info_pressed.connect(_on_get_purchase_info_pressed)
 
 func _on_get_purchases_failure(error: RuStoreError):
+	_loading.visible = false
 	_core_client.show_toast(error.description)
 
 
 # Confirm purchase
 func _on_confirm_purchase_pressed(purchase: RuStorePurchase):
+	_loading.visible = true
 	_billing_client.confirm_purchase(purchase.purchaseId, purchase.developerPayload)
 
 func _on_confirm_purchase_success(purchase_id: String):
+	_loading.visible = false
 	_billing_client.get_purchases()
 	_core_client.show_toast("Confirm " + purchase_id)
 
 func _on_confirm_purchase_failure(purchase_id: String, error: RuStoreError):
+	_loading.visible = false
 	_core_client.show_toast(purchase_id + " " + error.description)
 
 
 # Delete purchase
 func _on_delete_purchase_pressed(purchase: RuStorePurchase):
+	_loading.visible = true
 	_billing_client.delete_purchase(purchase.purchaseId)
 
 func _on_delete_purchase_success(purchase_id: String):
+	_loading.visible = false
 	_billing_client.get_purchases()
 	_core_client.show_toast("Delete " + purchase_id)
 
 func _on_delete_purchase_failure(purchase_id: String, error: RuStoreError):
+	_loading.visible = false
 	_core_client.show_toast(purchase_id + " " + error.description)
 
 
 # Get purchase info
 func _on_get_purchase_info_pressed(purchase: RuStorePurchase):
+	_loading.visible = true
 	_billing_client.get_purchase_info(purchase.purchaseId)
 
 func _on_get_purchase_info_success(purchase: RuStorePurchase):
+	_loading.visible = false
 	OS.alert(purchase.language + "\n" + purchase.amountLabel, purchase.productId)
 
 func _on_get_purchase_info_failure(purchase_id: String, error: RuStoreError):
+	_loading.visible = false
 	_core_client.show_toast(purchase_id + " " + error.description)
 
 
