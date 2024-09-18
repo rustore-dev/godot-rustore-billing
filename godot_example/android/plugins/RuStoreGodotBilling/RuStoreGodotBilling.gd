@@ -98,6 +98,11 @@ func _on_check_purchases_availability_failure(data: String):
 	on_check_purchases_availability_failure.emit(obj)
 
 
+# Is RuStore installed
+func is_rustore_installed() -> bool:
+	return _clientWrapper.isRuStoreInstalled()
+
+
 # Get products
 func get_products(productIds: Array):
 	_clientWrapper.getProducts(productIds)
