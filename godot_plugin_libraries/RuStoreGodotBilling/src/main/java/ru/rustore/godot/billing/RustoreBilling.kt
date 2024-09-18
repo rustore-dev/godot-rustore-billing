@@ -16,6 +16,7 @@ import ru.rustore.sdk.billingclient.provider.logger.ExternalPaymentLogger
 import ru.rustore.sdk.billingclient.utils.resolveForBilling
 import ru.rustore.sdk.core.exception.RuStoreException
 import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
+import ru.rustore.sdk.core.util.RuStoreUtils
 
 class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLogger {
     private companion object {
@@ -134,6 +135,12 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
                 }
         }
     }
+
+    @UsedByGodot
+    fun isRuStoreInstalled(): Boolean =
+        godot.getActivity()?.application?.let {
+            return RuStoreUtils.isRuStoreInstalled(it)
+        } ?: false
 
     @UsedByGodot
     fun getProducts(productIds: Array<String>) {
