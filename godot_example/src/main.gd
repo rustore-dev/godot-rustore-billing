@@ -3,6 +3,7 @@ extends Node2D
 @onready var _products_list = $CanvasLayer/VBoxContainer/TabContainer/Products/Products/ProductsList
 @onready var _purchases_list = $CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases/PurchasesList
 @onready var _loading = $CanvasLayer/LoadingPanel
+@onready var _is_rustore_installed_label = $CanvasLayer/VBoxContainer/IsRuStoreInstalled/Label
 
 const APPLICATION_ID = "184062"
 const DEEPLINK_SCHEME = "example"
@@ -44,6 +45,13 @@ func _ready():
 	_billing_client.set_error_handling(true)
 	_billing_client.init(APPLICATION_ID, DEEPLINK_SCHEME, false)
 	_billing_client.set_theme(ERuStoreTheme.Item.DARK)
+	
+	var is_rustore_installed: bool = _billing_client.is_rustore_installed()
+	
+	if(is_rustore_installed):
+		_is_rustore_installed_label.text = "RuStore is installed [v]"
+	else:
+		_is_rustore_installed_label.text = "RuStore is not installed [x]"
 
 
 # Check purchase availability
