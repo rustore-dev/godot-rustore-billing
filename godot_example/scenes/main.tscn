@@ -19,8 +19,19 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MarginContainerTop" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
+
+[node name="IsRuStoreInstalled" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/IsRuStoreInstalled"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "RuStore is not installed
+"
+horizontal_alignment = 1
 
 [node name="CheckPurchasesAvailabilityButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
