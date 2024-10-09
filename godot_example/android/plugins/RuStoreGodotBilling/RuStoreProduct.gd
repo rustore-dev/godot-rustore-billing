@@ -3,15 +3,15 @@ class_name RuStoreProduct extends Object
 var productId: String = ""
 var productStatus: ERuStoreProductStatus.Item = 0
 
-var productType: ERuStoreProductType.Item = 0
-var priceLabel: String = ""
-var price: int = 0
-var currency: String = ""
-var language: String = ""
-var title: String = ""
-var description: String = ""
-var imageUrl: String = ""
-var promoImageUrl: String = ""
+var productType = null
+var priceLabel = null
+var price = null
+var currency = null
+var language = null
+var title = null
+var description = null
+var imageUrl = null
+var promoImageUrl = null
 var subscription: RuStoreProductSubscription = null
 
 func _init(json: String = ""):
