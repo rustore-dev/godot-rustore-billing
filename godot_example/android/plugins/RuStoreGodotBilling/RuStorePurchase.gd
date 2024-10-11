@@ -1,19 +1,19 @@
 class_name RuStorePurchase extends Node
 
-var purchaseId: String = ""
+var purchaseId = null
 var productId: String = ""
-var productType: ERuStoreProductType.Item = ERuStoreProductType.Item.NON_CONSUMABLE
-var invoiceId: String = ""
-var language: String = ""
-var purchaseTime: String = ""
-var orderId: String = ""
-var amountLabel: String = ""
-var amount: int = 0
-var currency: String = ""
-var quantity: int = 0
-var purchaseState: ERuStorePurchaseState.Item = ERuStorePurchaseState.Item.CANCELLED
-var developerPayload: String = ""
-var subscriptionToken: String = ""
+var productType = null
+var invoiceId = null
+var language = null
+var purchaseTime = null
+var orderId = null
+var amountLabel = null
+var amount = null
+var currency = null
+var quantity = null
+var purchaseState = null
+var developerPayload = null
+var subscriptionToken = null
 
 func _init(json: String = ""):
 	if json != "":
