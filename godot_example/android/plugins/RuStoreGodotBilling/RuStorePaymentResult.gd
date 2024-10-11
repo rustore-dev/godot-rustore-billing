@@ -1,11 +1,11 @@
 class_name RuStorePaymentResult extends Object
 
 class Success extends RuStorePaymentResult:
-	var orderId: String = ""
+	var orderId = null
 	var purchaseId: String = ""
 	var productId: String = ""
 	var invoiceId: String = ""
-	var subscriptionToken: String = ""
+	var subscriptionToken = null
 	var sandbox: bool = false
 	
 	func _init(json: String = ""):
@@ -35,12 +35,12 @@ class Cancelled extends RuStorePaymentResult:
 
 
 class Failure extends RuStorePaymentResult:
-	var purchaseId: String = ""
-	var invoiceId: String = ""
-	var orderId: String = ""
-	var quantity: int = 0
-	var productId: String = ""
-	var errorCode: int = 0
+	var purchaseId = null
+	var invoiceId = null
+	var orderId = null
+	var quantity = null
+	var productId = null
+	var errorCode = null
 	var sandbox: bool = false
 	
 	func _init(json: String = ""):
