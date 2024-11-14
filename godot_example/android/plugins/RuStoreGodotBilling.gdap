@@ -4,4 +4,4 @@ binary_type="local"
 binary="RuStoreGodotBilling/RuStoreGodotBilling.aar"
 
 [dependencies]
-remote=["ru.rustore.sdk:billingclient:6.1.0"]
+remote=["ru.rustore.sdk:billingclient:7.0.0"]
