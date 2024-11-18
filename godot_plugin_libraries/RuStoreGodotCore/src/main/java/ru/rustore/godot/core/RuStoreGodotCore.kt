@@ -30,10 +30,12 @@ class RuStoreGodotCore(godot: Godot?): GodotPlugin(godot) {
     fun copyToClipboard(text: String) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) return
 
-        godot.getActivity()?.run {
-            val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText(CLIP_DATA_TOOLTIP, text)
-            clipboard.setPrimaryClip(clip)
+        godot.getActivity()?.runOnUiThread {
+            godot.getActivity()?.run {
+                val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText(CLIP_DATA_TOOLTIP, text)
+                clipboard.setPrimaryClip(clip)
+            }
         }
     }
 

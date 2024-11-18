@@ -131,6 +131,7 @@ func _on_get_purchases_success(purchases: Array):
 	for purchase in purchases:
 		var purchase_panel: PurchasePanel = load("res://scenes/purchase.tscn").instantiate()
 		_purchases_list.add_child(purchase_panel)
+		_purchases_list.move_child(purchase_panel, 0)
 		purchase_panel.set_purchase(purchase)
 		purchase_panel.on_confirm_purchase_pressed.connect(_on_confirm_purchase_pressed)
 		purchase_panel.on_delete_purchase_pressed.connect(_on_delete_purchase_pressed)
