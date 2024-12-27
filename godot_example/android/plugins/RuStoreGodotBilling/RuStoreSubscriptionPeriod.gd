@@ -1,7 +1,14 @@
+# RuStoreSubscriptionPeriod
+# @brief Информация о периоде подписки.
 class_name RuStoreSubscriptionPeriod extends Object
 
+# @brief Количество дней.
 var days: int = 0
+
+# @brief Количество месяцев.
 var months: int = 0
+
+# @brief Количество лет.
 var years: int = 0
 
 func _init(json: String = ""):

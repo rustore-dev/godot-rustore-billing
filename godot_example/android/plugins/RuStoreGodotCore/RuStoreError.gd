@@ -1,6 +1,13 @@
+# RuStoreError
+# @brief Информация об ошибке.
 class_name RuStoreError extends Object
 
+# @brief
+#	Название ошибки.
+#	Содержит имя simpleName класса ошибки.
 var name: String = ""
+
+# @brief Сообщение ошибки.
 var description: String = ""
 
 func _init(json: String = ""):

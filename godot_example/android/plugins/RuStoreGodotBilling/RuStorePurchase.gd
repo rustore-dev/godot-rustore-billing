@@ -1,18 +1,53 @@
+# RuStorePurchase
+# @brief Информация о покупке.
 class_name RuStorePurchase extends Node
 
+# @brief Идентификатор покупки.
 var purchaseId = null
+
+# @brief Идентификатор продукта, который был присвоен продукту в консоли RuStore.
 var productId: String = ""
+
+# @brief Тип продукта.
 var productType = null
+
+# @brief Идентификатор счёта.
 var invoiceId = null
+
+# @brief Язык, указанный с помощью BCP 47 кодирования.
 var language = null
+
+# @brief Время покупки.
 var purchaseTime = null
+
+# @brief
+#	Уникальный идентификатор оплаты, сформированный приложением (опциональный параметр).
+#	Если вы укажете этот параметр в вашей системе, вы получите его в ответе при работе с API.
+#	Если не укажете, он будет сгенерирован автоматически (uuid).
+#	Максимальная длина 150 символов.
 var orderId = null
+
+# @brief Отформатированная цена покупки, включая валютный знак.
 var amountLabel = null
+
+# @brief Цена в минимальных единицах валюты (например в копейках).
 var amount = null
+
+# @brief Код валюты ISO 4217.
 var currency = null
+
+# @brief Количество продукта.
 var quantity = null
+
+# @brief Состояние покупки.
 var purchaseState = null
+
+# @brief
+#	Строка с дополнительной информацией о заказе,
+#	которую вы можете установить при инициализации процесса покупки.
 var developerPayload = null
+
+# @brief Токен для валидации покупки на сервере.
 var subscriptionToken = null
 
 func _init(json: String = ""):
