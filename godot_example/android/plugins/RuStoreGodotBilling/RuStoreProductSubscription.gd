@@ -1,10 +1,23 @@
+# RuStoreProductSubscription
+# @brief Информация о подписке.
 class_name RuStoreProductSubscription extends Object
 
+# @brief Период подписки.
 var subscriptionPeriod: RuStoreSubscriptionPeriod = null
+
+# @brief Пробный период подписки.
 var freeTrialPeriod: RuStoreSubscriptionPeriod = null
+
+# @brief Льготный период подписки.
 var gracePeriod: RuStoreSubscriptionPeriod = null
+
+# @brief Отформатированная вступительная цена подписки, включая знак валюты, на языке RuStoreProduct.language.
 var introductoryPrice: String = ""
+
+# @brief Вступительная цена в минимальных единицах валюты (напрмер в копейках).
 var introductoryPriceAmount: String = ""
+
+# @brief Расчётный период вступительной цены.
 var introductoryPricePeriod: RuStoreSubscriptionPeriod = null
 
 func _init(json: String = ""):
