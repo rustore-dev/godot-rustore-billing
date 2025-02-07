@@ -12,10 +12,10 @@ import org.godotengine.godot.plugin.UsedByGodot
 import ru.rustore.godot.core.JsonBuilder
 import ru.rustore.sdk.billingclient.RuStoreBillingClient
 import ru.rustore.sdk.billingclient.RuStoreBillingClientFactory
+import ru.rustore.sdk.billingclient.model.purchase.PurchaseAvailabilityResult
 import ru.rustore.sdk.billingclient.provider.logger.ExternalPaymentLogger
 import ru.rustore.sdk.billingclient.utils.resolveForBilling
 import ru.rustore.sdk.core.exception.RuStoreException
-import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 import ru.rustore.sdk.core.util.RuStoreUtils
 
 class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLogger {
@@ -78,11 +78,13 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
     private var allowErrorHandling: Boolean = false
 
     @UsedByGodot
+    @Deprecated("This field is deprecated. Error handling must be performed on the application side.")
     fun setErrorHandling(allowErrorHandling: Boolean) {
         this.allowErrorHandling = allowErrorHandling
     }
 
     @UsedByGodot
+    @Deprecated("This field is deprecated. Error handling must be performed on the application side.")
     fun getErrorHandling() : Boolean {
         return allowErrorHandling
     }
@@ -113,18 +115,23 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
     }
 
     @UsedByGodot
+    @Deprecated("This method is deprecated. This method only works for flows with an authorized user in RuStore.")
     fun checkPurchasesAvailability() {
         client?.run {
             purchases.checkPurchasesAvailability()
                 .addOnSuccessListener { result ->
                     when (result) {
-                        is FeatureAvailabilityResult.Available -> {
+                        is PurchaseAvailabilityResult.Available -> {
                             emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, """{"isAvailable": true}""")
                         }
-                        is FeatureAvailabilityResult.Unavailable -> {
+                        is PurchaseAvailabilityResult.Unavailable -> {
                             val cause = JsonBuilder.toJson(result.cause)
                             val json = """{"isAvailable": false, "cause": $cause}"""
-                            handleError(result.cause)
+                            emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, json)
+                        }
+                        else -> {
+                            val cause = """{"simpleName": "Error", "detailMessage": "Unknown response type"}"""
+                            val json = """{"isAvailable": false, "cause": $cause}"""
                             emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, json)
                         }
                     }

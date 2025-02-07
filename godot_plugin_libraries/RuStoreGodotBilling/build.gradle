@@ -68,7 +68,7 @@ binary_type="local"
 binary="${project.name}/${project.name}.aar"
 
 [dependencies]
-remote=["$sdk_lib_dependence"]
+remote=["$sdk_lib_dependence", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"]
 """
 
         def outputFile = file("../../godot_example/android/plugins/${project.name}.gdap")

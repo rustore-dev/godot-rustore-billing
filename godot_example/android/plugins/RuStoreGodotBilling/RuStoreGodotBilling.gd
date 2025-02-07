@@ -10,9 +10,11 @@ var _clientWrapper: Object = null
 var _core_client: RuStoreGodotCoreUtils = null
 
 # @brief Действие, выполняемое при успешном завершении операции check_purchases_availability.
+# @deprecated
 signal on_check_purchases_availability_success
 
 # @brief Действие, выполняемое в случае ошибки check_purchases_availability.
+# @deprecated
 signal on_check_purchases_availability_failure
 
 # @brief Действие, выполняемое при успешном завершении операции get_products.
@@ -140,11 +142,13 @@ func init(
 # Error processing
 # @brief Обработка ошибок в нативном SDK.
 # @param value true — разрешает обработку ошибок, false — запрещает.
+# @deprecated
 func set_error_handling(value: bool):
 	_clientWrapper.setErrorHandling(value)
 
 # @brief Получает текущее состояние режима обработки ошибок в нативном SDK.
 # @return Возвращает true, если обработка ошибок разрешена, и false, если запрещена.
+# @deprecated
 func get_error_handling() -> bool:
 	return _clientWrapper.getErrorHandling()
 
@@ -163,11 +167,12 @@ func set_theme(themeCode: int):
 
 # Check purchases availability
 # @brief Проверка доступности платежей.
+# @deprecated
 func check_purchases_availability():
 	_clientWrapper.checkPurchasesAvailability()
 
 func _on_check_purchases_availability_success(data: String):
-	var obj = RuStoreFeatureAvailabilityResult.new(data)
+	var obj = RuStoreBillingJsonParser.ToPurchaseAvailabilityResult(data)
 	on_check_purchases_availability_success.emit(obj)
 
 func _on_check_purchases_availability_failure(data: String):
