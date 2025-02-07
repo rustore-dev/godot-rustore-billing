@@ -5,15 +5,11 @@ extends Node2D
 @onready var _loading = $CanvasLayer/LoadingPanel
 @onready var _is_rustore_installed_label = $CanvasLayer/VBoxContainer/IsRuStoreInstalled/Label
 
-const APPLICATION_ID = "184062"
+const APPLICATION_ID = "198332"
 const DEEPLINK_SCHEME = "example"
 const PRODUCT_IDS = [
-	"ue_non_con2",
-	"ue_non_con1",
-	"ue_con2",
-	"ue_con1",
-	"ue_sub2",
-	"ue_sub1"]
+	"unity_non_con_1",
+	"unity_con_2"]
 
 var _core_client: RuStoreGodotCoreUtils = null
 var _billing_client: RuStoreGodotBillingClient = null
@@ -59,10 +55,13 @@ func _on_check_purchases_availability_button_pressed():
 	_loading.visible = true
 	_billing_client.check_purchases_availability()
 
-func _on_check_purchases_availability_success(result: RuStoreFeatureAvailabilityResult):
+func _on_check_purchases_availability_success(result: RuStorePurchaseAvailabilityResult):
 	_loading.visible = false
 	if result.isAvailable:
 		_core_client.show_toast("Purchases are available")
+	else:
+		_core_client.show_toast("Purchases are not available")
+		_core_client.show_toast(result.cause.name + ":\n" + result.cause.description)
 
 func _on_check_purchases_availability_failure(error: RuStoreError):
 	_loading.visible = false
