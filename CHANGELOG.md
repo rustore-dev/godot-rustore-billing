@@ -1,5 +1,12 @@
 ## История изменений
 
+### Release 8.0.0
+- Версия SDK billing 8.0.0.
+- Метод `check_purchases_availability` в классе `RuStoreGodotBillingClient` помечен как устаревший.
+- Сигнал `on_check_purchases_availability_success` возвращает объект `RuStorePurchaseAvailabilityResult`.
+- Метод `set_error_handling` в классе `RuStoreGodotBillingClient` помечен как устаревший.
+- Метод `get_error_handling` в классе `RuStoreGodotBillingClient` помечен как устаревший.
+
 ### Release 7.0.0
 - Версия SDK billing 7.0.0.
 
