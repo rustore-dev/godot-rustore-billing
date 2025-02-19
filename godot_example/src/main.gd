@@ -18,8 +18,8 @@ func _ready():
 	_core_client = RuStoreGodotCoreUtils.get_instance()
 	
 	_billing_client = RuStoreGodotBillingClient.get_instance()
-	_billing_client.on_check_purchases_availability_success.connect(_on_check_purchases_availability_success)
-	_billing_client.on_check_purchases_availability_failure.connect(_on_check_purchases_availability_failure)
+	_billing_client.on_get_authorization_status_success.connect(_on_get_authorization_status_success)
+	_billing_client.on_get_authorization_status_failure.connect(_on_get_authorization_status_failure)
 	_billing_client.on_get_products_success.connect(_on_get_products_success)
 	_billing_client.on_get_products_failure.connect(_on_get_products_failure)
 	_billing_client.on_purchase_product_success.connect(_on_purchase_product_success)
@@ -50,20 +50,16 @@ func _ready():
 		_is_rustore_installed_label.text = "RuStore is not installed [x]"
 
 
-# Check purchase availability
-func _on_check_purchases_availability_button_pressed():
+# Get authorization status
+func _on_get_authorization_status_button_pressed():
 	_loading.visible = true
-	_billing_client.check_purchases_availability()
+	_billing_client.get_authorization_status()
 
-func _on_check_purchases_availability_success(result: RuStorePurchaseAvailabilityResult):
+func _on_get_authorization_status_success(result: RuStoreBillingUserAuthorizationStatus):
 	_loading.visible = false
-	if result.isAvailable:
-		_core_client.show_toast("Purchases are available")
-	else:
-		_core_client.show_toast("Purchases are not available")
-		_core_client.show_toast(result.cause.name + ":\n" + result.cause.description)
+	OS.alert(str(result.authorized), "UserAuthorizationStatus")
 
-func _on_check_purchases_availability_failure(error: RuStoreError):
+func _on_get_authorization_status_failure(error: RuStoreError):
 	_loading.visible = false
 	_core_client.show_toast(error.description)
 

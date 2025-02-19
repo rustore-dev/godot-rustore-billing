@@ -13,3 +13,13 @@ static func ToPurchaseAvailabilityResult(json: String = "") -> RuStorePurchaseAv
 			result.cause = RuStoreError.new(jcause)
 	
 	return result
+
+static func ToUserAuthorizationStatus(json: String = "") -> RuStoreBillingUserAuthorizationStatus:
+	var result: RuStoreBillingUserAuthorizationStatus = null
+	
+	if json != "":
+		var obj = JSON.parse_string(json)
+		result = RuStoreBillingUserAuthorizationStatus.new()
+		result.authorized = obj["authorized"]
+	
+	return result

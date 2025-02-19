@@ -22,6 +22,8 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
     private companion object {
         const val CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS = "rustore_check_purchases_available_success"
         const val CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE = "rustore_check_purchases_available_failure"
+        const val CHANNEL_ON_GET_AUTHORIZATION_STATUS_SUCCESS = "rustore_on_get_authorization_status_success"
+        const val CHANNEL_ON_GET_AUTHORIZATION_STATUS_FAILURE = "rustore_on_get_authorization_status_failure"
         const val CHANNEL_ON_GET_PRODUCTS_SUCCESS = "rustore_on_get_products_success"
         const val CHANNEL_ON_GET_PRODUCTS_FAILURE = "rustore_on_get_products_failure"
         const val CHANNEL_ON_PURCHASE_PRODUCT_SUCCESS = "rustore_on_purchase_product_success"
@@ -49,6 +51,8 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
         val signals: MutableSet<SignalInfo> = ArraySet()
         signals.add(SignalInfo(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, String::class.java))
         signals.add(SignalInfo(CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_GET_AUTHORIZATION_STATUS_SUCCESS, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_GET_AUTHORIZATION_STATUS_FAILURE, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_GET_PRODUCTS_SUCCESS, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_GET_PRODUCTS_FAILURE, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_PURCHASE_PRODUCT_SUCCESS, String::class.java))
@@ -139,6 +143,20 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
                 .addOnFailureListener { throwable ->
                     handleError(throwable)
                     emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE, JsonBuilder.toJson(throwable))
+                }
+        }
+    }
+
+    @UsedByGodot
+    fun getAuthorizationStatus() {
+        client?.run {
+            userInfo.getAuthorizationStatus()
+                .addOnSuccessListener { result ->
+                    emitSignal(CHANNEL_ON_GET_AUTHORIZATION_STATUS_SUCCESS, gson.toJson(result))
+                }
+                .addOnFailureListener { throwable ->
+                    handleError(throwable)
+                    emitSignal(CHANNEL_ON_GET_AUTHORIZATION_STATUS_FAILURE, JsonBuilder.toJson(throwable))
                 }
         }
     }
