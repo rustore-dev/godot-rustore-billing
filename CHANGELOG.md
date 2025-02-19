@@ -6,6 +6,7 @@
 - Сигнал `on_check_purchases_availability_success` возвращает объект `RuStorePurchaseAvailabilityResult`.
 - Метод `set_error_handling` в классе `RuStoreGodotBillingClient` помечен как устаревший.
 - Метод `get_error_handling` в классе `RuStoreGodotBillingClient` помечен как устаревший.
+- В класс `RuStoreGodotBillingClient` добавлен метод `get_authorization_status`.
 
 ### Release 7.0.0
 - Версия SDK billing 7.0.0.
