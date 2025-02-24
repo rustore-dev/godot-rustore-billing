@@ -10,10 +10,20 @@ var _clientWrapper: Object = null
 var _core_client: RuStoreGodotCoreUtils = null
 
 # @brief Действие, выполняемое при успешном завершении операции check_purchases_availability.
+# @deprecated
 signal on_check_purchases_availability_success
 
 # @brief Действие, выполняемое в случае ошибки check_purchases_availability.
+# @deprecated
 signal on_check_purchases_availability_failure
+
+# @brief Действие, выполняемое при успешном завершении операции get_authorization_status.
+# @deprecated
+signal on_get_authorization_status_success
+
+# @brief Действие, выполняемое в случае ошибки get_authorization_status.
+# @deprecated
+signal on_get_authorization_status_failure
 
 # @brief Действие, выполняемое при успешном завершении операции get_products.
 signal on_get_products_success
@@ -115,6 +125,8 @@ func init(
 		_clientWrapper = Engine.get_singleton(SINGLETON_NAME)
 		_clientWrapper.rustore_check_purchases_available_success.connect(_on_check_purchases_availability_success)
 		_clientWrapper.rustore_check_purchases_available_failure.connect(_on_check_purchases_availability_failure)
+		_clientWrapper.rustore_on_get_authorization_status_success.connect(_on_get_authorization_status_success)
+		_clientWrapper.rustore_on_get_authorization_status_failure.connect(_on_get_authorization_status_failure)
 		_clientWrapper.rustore_on_get_products_success.connect(_on_get_products_success)
 		_clientWrapper.rustore_on_get_products_failure.connect(_on_get_products_failure)
 		_clientWrapper.rustore_on_purchase_product_success.connect(_on_purchase_product_success)
@@ -140,11 +152,13 @@ func init(
 # Error processing
 # @brief Обработка ошибок в нативном SDK.
 # @param value true — разрешает обработку ошибок, false — запрещает.
+# @deprecated
 func set_error_handling(value: bool):
 	_clientWrapper.setErrorHandling(value)
 
 # @brief Получает текущее состояние режима обработки ошибок в нативном SDK.
 # @return Возвращает true, если обработка ошибок разрешена, и false, если запрещена.
+# @deprecated
 func get_error_handling() -> bool:
 	return _clientWrapper.getErrorHandling()
 
@@ -163,16 +177,31 @@ func set_theme(themeCode: int):
 
 # Check purchases availability
 # @brief Проверка доступности платежей.
+# @deprecated
 func check_purchases_availability():
 	_clientWrapper.checkPurchasesAvailability()
 
 func _on_check_purchases_availability_success(data: String):
-	var obj = RuStoreFeatureAvailabilityResult.new(data)
+	var obj = RuStoreBillingJsonParser.ToPurchaseAvailabilityResult(data)
 	on_check_purchases_availability_success.emit(obj)
 
 func _on_check_purchases_availability_failure(data: String):
 	var obj = RuStoreError.new(data)
 	on_check_purchases_availability_failure.emit(obj)
+
+
+# Get authorization status
+# @brief Проверка статуса авторизации у пользователя.
+func get_authorization_status():
+	_clientWrapper.getAuthorizationStatus()
+
+func _on_get_authorization_status_success(data: String):
+	var obj = RuStoreBillingJsonParser.ToUserAuthorizationStatus(data)
+	on_get_authorization_status_success.emit(obj)
+
+func _on_get_authorization_status_failure(data: String):
+	var obj = RuStoreError.new(data)
+	on_get_authorization_status_failure.emit(obj)
 
 
 # Is RuStore installed

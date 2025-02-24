@@ -33,12 +33,12 @@ text = "RuStore is not installed
 "
 horizontal_alignment = 1
 
-[node name="CheckPurchasesAvailabilityButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+[node name="GetAuthorizationStatusButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_r7fnr")
 theme_override_font_sizes/font_size = 48
-text = " Check purchases availability "
+text = " Get authorization status "
 
 [node name="MarginContainerMiddle" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
@@ -129,7 +129,7 @@ value = 0.5
 show_percentage = false
 script = ExtResource("5_6kl2t")
 
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/CheckPurchasesAvailabilityButton" to="." method="_on_check_purchases_availability_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/GetAuthorizationStatusButton" to="." method="_on_get_authorization_status_button_pressed"]
 [connection signal="tab_clicked" from="CanvasLayer/VBoxContainer/TabContainer" to="." method="_on_tab_container_tab_clicked"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/TabContainer/Products/Products/UpdateProductsListButton" to="." method="_on_update_products_list_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/TabContainer/Purchases/Purchases/UpdatePurchasesListButton" to="." method="_on_update_purchases_list_button_pressed"]

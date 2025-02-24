@@ -12,16 +12,18 @@ import org.godotengine.godot.plugin.UsedByGodot
 import ru.rustore.godot.core.JsonBuilder
 import ru.rustore.sdk.billingclient.RuStoreBillingClient
 import ru.rustore.sdk.billingclient.RuStoreBillingClientFactory
+import ru.rustore.sdk.billingclient.model.purchase.PurchaseAvailabilityResult
 import ru.rustore.sdk.billingclient.provider.logger.ExternalPaymentLogger
 import ru.rustore.sdk.billingclient.utils.resolveForBilling
 import ru.rustore.sdk.core.exception.RuStoreException
-import ru.rustore.sdk.core.feature.model.FeatureAvailabilityResult
 import ru.rustore.sdk.core.util.RuStoreUtils
 
 class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLogger {
     private companion object {
         const val CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS = "rustore_check_purchases_available_success"
         const val CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE = "rustore_check_purchases_available_failure"
+        const val CHANNEL_ON_GET_AUTHORIZATION_STATUS_SUCCESS = "rustore_on_get_authorization_status_success"
+        const val CHANNEL_ON_GET_AUTHORIZATION_STATUS_FAILURE = "rustore_on_get_authorization_status_failure"
         const val CHANNEL_ON_GET_PRODUCTS_SUCCESS = "rustore_on_get_products_success"
         const val CHANNEL_ON_GET_PRODUCTS_FAILURE = "rustore_on_get_products_failure"
         const val CHANNEL_ON_PURCHASE_PRODUCT_SUCCESS = "rustore_on_purchase_product_success"
@@ -49,6 +51,8 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
         val signals: MutableSet<SignalInfo> = ArraySet()
         signals.add(SignalInfo(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, String::class.java))
         signals.add(SignalInfo(CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_GET_AUTHORIZATION_STATUS_SUCCESS, String::class.java))
+        signals.add(SignalInfo(CHANNEL_ON_GET_AUTHORIZATION_STATUS_FAILURE, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_GET_PRODUCTS_SUCCESS, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_GET_PRODUCTS_FAILURE, String::class.java))
         signals.add(SignalInfo(CHANNEL_ON_PURCHASE_PRODUCT_SUCCESS, String::class.java))
@@ -78,11 +82,13 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
     private var allowErrorHandling: Boolean = false
 
     @UsedByGodot
+    @Deprecated("This field is deprecated. Error handling must be performed on the application side.")
     fun setErrorHandling(allowErrorHandling: Boolean) {
         this.allowErrorHandling = allowErrorHandling
     }
 
     @UsedByGodot
+    @Deprecated("This field is deprecated. Error handling must be performed on the application side.")
     fun getErrorHandling() : Boolean {
         return allowErrorHandling
     }
@@ -113,18 +119,23 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
     }
 
     @UsedByGodot
+    @Deprecated("This method is deprecated. This method only works for flows with an authorized user in RuStore.")
     fun checkPurchasesAvailability() {
         client?.run {
             purchases.checkPurchasesAvailability()
                 .addOnSuccessListener { result ->
                     when (result) {
-                        is FeatureAvailabilityResult.Available -> {
+                        is PurchaseAvailabilityResult.Available -> {
                             emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, """{"isAvailable": true}""")
                         }
-                        is FeatureAvailabilityResult.Unavailable -> {
+                        is PurchaseAvailabilityResult.Unavailable -> {
                             val cause = JsonBuilder.toJson(result.cause)
                             val json = """{"isAvailable": false, "cause": $cause}"""
-                            handleError(result.cause)
+                            emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, json)
+                        }
+                        else -> {
+                            val cause = """{"simpleName": "Error", "detailMessage": "Unknown response type"}"""
+                            val json = """{"isAvailable": false, "cause": $cause}"""
                             emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_SUCCESS, json)
                         }
                     }
@@ -132,6 +143,20 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
                 .addOnFailureListener { throwable ->
                     handleError(throwable)
                     emitSignal(CHANNEL_CHECK_PURCHASES_AVAILABLE_FAILURE, JsonBuilder.toJson(throwable))
+                }
+        }
+    }
+
+    @UsedByGodot
+    fun getAuthorizationStatus() {
+        client?.run {
+            userInfo.getAuthorizationStatus()
+                .addOnSuccessListener { result ->
+                    emitSignal(CHANNEL_ON_GET_AUTHORIZATION_STATUS_SUCCESS, gson.toJson(result))
+                }
+                .addOnFailureListener { throwable ->
+                    handleError(throwable)
+                    emitSignal(CHANNEL_ON_GET_AUTHORIZATION_STATUS_FAILURE, JsonBuilder.toJson(throwable))
                 }
         }
     }
