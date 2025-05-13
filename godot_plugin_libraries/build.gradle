@@ -41,6 +41,13 @@ task copyAndroidManifest(type: Copy) {
     into    ( [androidDir, 'build_example'].join(File.separator) )
 }
 
+task copyGodotApp(type: Copy) {
+    from    ( [androidDir, 'build', 'src', 'com', 'godot', 'game'].join(File.separator) )
+    include ( "GodotApp.java" )
+    into    ( [androidDir, 'build_example', 'src', 'com', 'godot', 'game'].join(File.separator) )
+}
+
 task copyBuildFiles {
     copyAndroidManifest.copy()
+    copyGodotApp.copy()
 }
