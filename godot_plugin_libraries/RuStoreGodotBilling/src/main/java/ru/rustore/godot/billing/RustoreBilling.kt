@@ -4,6 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import android.util.ArraySet
 import com.google.gson.GsonBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.godotengine.godot.Dictionary
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -74,6 +78,7 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
         return signals
     }
 
+    private var intentJob: Job? = null
     private var client: RuStoreBillingClient? = null
     private val gson = GsonBuilder()
         .registerTypeAdapter(Uri::class.java, UriTypeAdapter())
@@ -115,7 +120,24 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
                 debugLogs = debugLogs,
                 externalPaymentLoggerFactory = if (debugLogs) { tag -> this.tag = tag; this } else null
             )
+
+            intentJob = CoroutineScope(Dispatchers.Main).launch {
+                IntentEventBus.intents.collect { intent ->
+                    handleIntent(intent)
+                }
+            }
         }
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.let { data ->
+            client?.onNewIntent(data)
+        }
+    }
+
+    override fun onMainDestroy() {
+        super.onMainDestroy()
+        intentJob?.cancel()
     }
 
     @UsedByGodot
@@ -264,14 +286,6 @@ class RuStoreGodotBilling(godot: Godot?) : GodotPlugin(godot), ExternalPaymentLo
     @UsedByGodot
     fun setTheme(themeCode: Int) {
         RuStoreBillingClientThemeProviderImpl.setTheme(themeCode)
-    }
-
-    override fun onMainActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onMainActivityResult(requestCode, resultCode, data)
-
-        if (data != null) {
-            client?.onNewIntent(data)
-        }
     }
 
     override fun d(e: Throwable?, message: () -> String) {
