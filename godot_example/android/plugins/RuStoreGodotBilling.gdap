@@ -4,4 +4,4 @@ binary_type="local"
 binary="RuStoreGodotBilling/RuStoreGodotBilling.aar"
 
 [dependencies]
-remote=["ru.rustore.sdk:billingclient:8.0.0", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"]
+remote=["ru.rustore.sdk:billingclient:9.0.1", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"]
