@@ -56,4 +56,4 @@
 
 Дополнительная помощь и инструкции доступны на странице [rustore.ru/help/](https://www.rustore.ru/help/) и по электронной почте [support@rustore.ru](mailto:support@rustore.ru).
 
-[10]: https://www.rustore.ru/help/sdk/payments/godot/9-0-1
+[10]: https://www.rustore.ru/help/sdk/payments/godot/9-1-0
