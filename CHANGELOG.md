@@ -2,6 +2,7 @@
 
 ### Release 9.1.0
 - Версия SDK billing 9.1.0.
+- Классы `RuStoreSubscriptionPeriod` и `RuStoreProductSubscription` теперь унаследованы от `RefCounted`.
 
 ### Release 9.0.1
 - Версия SDK billing 9.0.1.
