@@ -1,3 +1,5 @@
+# RuStoreGodotCoreUtils
+# @brief Класс реализует коллекцию вспомогательных методов для взаимодействия с приложением RuStore.
 class_name RuStoreGodotCoreUtils extends Object
 
 const SINGLETON_NAME = "RuStoreGodotCore"
@@ -8,6 +10,11 @@ var _clientWrapper: Object = null
 static var _instance: RuStoreGodotCoreUtils = null
 
 
+# @brief
+#	Получить экземпляр RuStoreGodotCoreUtils.
+# @return
+#	Возвращает указатель на единственный экземпляр RuStoreGodotCoreUtils (реализация паттерна Singleton).
+#	Если экземпляр еще не создан, создает его.
 static func get_instance() -> RuStoreGodotCoreUtils:
 	if _instance == null:
 		_instance = RuStoreGodotCoreUtils.new()
@@ -58,3 +65,28 @@ func set_string_shared_preferences(storageName: String, key: String, value: Stri
 
 func set_int_shared_preferences(storageName: String, key: String, value: int):
 	_clientWrapper.setIntSharedPreferences(storageName, key, value)
+
+
+# @brief Проверка наличия приложения RuStore на устройстве пользователя.
+# @return
+#	Возвращает true, если RuStore установлен, в противном случае — false.
+func is_rustore_installed() -> Variant:
+	var json = _clientWrapper.isRuStoreInstalled()
+	return JSON.parse_string(json)
+
+
+# @brief Открыть веб-страницу для скачивания приложения RuStore.
+func open_rustore_download_instruction():
+	_clientWrapper.openRuStoreDownloadInstruction()
+
+
+# @brief Запуск приложения RuStore.
+func open_rustore():
+	_clientWrapper.openRuStore()
+
+
+# @brief
+#	Запуск приложения RuStore для авторизации.
+#	После успешной авторизации пользователя приложение RuStore автоматически закроется.
+func open_rustore_authorization():
+	_clientWrapper.openRuStoreAuthorization()

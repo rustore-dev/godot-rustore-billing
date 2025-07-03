@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 24
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode sdk_version_code
         versionName "${rustore_core_version}"
 
@@ -38,8 +38,9 @@ android {
 
 dependencies {
 
+    implementation "$sdk_core_dependence"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "com.google.code.gson:gson:2.10.1"
+    implementation "$sdk_gson_dependence"
     implementation "androidx.fragment:fragment:1.3.0"
     compileOnly fileTree(dir: '../libs', include: ['*.aar', '*.jar'], exclude: [])
     testImplementation 'junit:junit:4.+'
@@ -63,9 +64,8 @@ binary="${project.name}/${project.name}.aar"
 
 [dependencies]
 custom_maven_repos=["https://artifactory-external.vkpartner.ru/artifactory/maven"]
-remote=["com.google.code.gson:gson:2.10.1"]
+remote=["$sdk_gson_dependence"]
 """
-
         def outputFile = file("../../godot_example/android/plugins/${project.name}.gdap")
 
         outputFile.parentFile.mkdirs()

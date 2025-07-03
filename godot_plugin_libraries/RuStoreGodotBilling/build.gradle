@@ -36,15 +36,11 @@ android {
     }
 }
 
-ext {
-    sdk_lib_dependence = "ru.rustore.sdk:billingclient:$rustore_billingclient_version$rustore_sdk_type"
-}
-
 dependencies {
 
-    implementation "$sdk_lib_dependence"
+    implementation "$sdk_billingclient_dependence"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "com.google.code.gson:gson:2.10.1"
+    implementation "$sdk_gson_dependence"
     implementation "androidx.fragment:fragment:1.3.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
     implementation project(path: ':RuStoreGodotCore')
@@ -69,7 +65,7 @@ binary_type="local"
 binary="${project.name}/${project.name}.aar"
 
 [dependencies]
-remote=["$sdk_lib_dependence", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"]
+remote=["$sdk_billingclient_dependence", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"]
 """
 
         def outputFile = file("../../godot_example/android/plugins/${project.name}.gdap")

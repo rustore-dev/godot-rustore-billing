@@ -38,8 +38,8 @@ func _ready():
 	_billing_client.on_payment_logger_verbose.connect(_on_payment_logger_verbose)
 	_billing_client.on_payment_logger_warning.connect(_on_payment_logger_warning)
 	
-	_billing_client.set_error_handling(true)
 	_billing_client.init(APPLICATION_ID, DEEPLINK_SCHEME, false)
+	_billing_client.set_error_handling(true)
 	_billing_client.set_theme(ERuStoreTheme.Item.DARK)
 	
 	var is_rustore_installed: bool = _billing_client.is_rustore_installed()
@@ -99,7 +99,6 @@ func _on_get_products_failure(error: RuStoreError):
 # Purchase product
 func _on_purchase_product_pressed(product: RuStoreProduct):
 	_billing_client.purchase_product(product.productId)
-	product.free()
 
 func _on_purchase_product_success(result: RuStorePaymentResult):
 	if result is RuStorePaymentResult.Success:
@@ -165,7 +164,6 @@ func _on_confirm_purchase_failure(purchase_id: String, error: RuStoreError):
 func _on_delete_purchase_pressed(purchase: RuStorePurchase):
 	_loading.visible = true
 	_billing_client.delete_purchase(purchase.purchaseId)
-	purchase.free()
 
 func _on_delete_purchase_success(purchase_id: String):
 	_loading.visible = false
@@ -182,7 +180,6 @@ func _on_delete_purchase_failure(purchase_id: String, error: RuStoreError):
 func _on_get_purchase_info_pressed(purchase: RuStorePurchase):
 	_loading.visible = true
 	_billing_client.get_purchase_info(purchase.purchaseId)
-	purchase.free()
 
 func _on_get_purchase_info_success(purchase: RuStorePurchase):
 	_loading.visible = false

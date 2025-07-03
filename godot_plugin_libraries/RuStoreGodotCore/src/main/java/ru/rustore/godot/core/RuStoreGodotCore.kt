@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.widget.Toast
+import com.google.gson.Gson
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
+import ru.rustore.sdk.core.util.RuStoreUtils
 
 
 class RuStoreGodotCore(godot: Godot?): GodotPlugin(godot) {
@@ -108,6 +110,36 @@ class RuStoreGodotCore(godot: Godot?): GodotPlugin(godot) {
             val editor = preferences.edit()
             editor.putInt(key, value)
             editor.apply()
+        }
+    }
+
+    @UsedByGodot
+    fun isRuStoreInstalled(): String {
+        val result = activity?.let { activity ->
+            RuStoreUtils.isRuStoreInstalled(activity)
+        }
+
+        return Gson().toJson(result)
+    }
+
+    @UsedByGodot
+    fun openRuStoreDownloadInstruction() {
+        activity?.let { activity ->
+            RuStoreUtils.openRuStoreDownloadInstruction(activity)
+        }
+    }
+
+    @UsedByGodot
+    fun openRuStore() {
+        activity?.let { activity ->
+            RuStoreUtils.openRuStore(activity)
+        }
+    }
+
+    @UsedByGodot
+    fun openRuStoreAuthorization() {
+        activity?.let { activity ->
+            RuStoreUtils.openRuStoreAuthorization(activity)
         }
     }
 }

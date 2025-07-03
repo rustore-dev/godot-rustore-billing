@@ -24,5 +24,14 @@ func set_product(product: RuStoreProduct):
 	_productStatus.text = STATUS_LABEL + ERuStoreProductStatus.Item.find_key(_product.productStatus)
 	_productPrice.text = PRICE_LABEL + str(_product.price)
 
+func free_product():
+	if is_instance_valid(_product):
+		_product.free()
+	_product = null
+
 func _on_purchase_pressed():
 	on_purchase_product_pressed.emit(_product)
+
+func _notification(what: int):
+	if what == NOTIFICATION_PREDELETE:
+		free_product()

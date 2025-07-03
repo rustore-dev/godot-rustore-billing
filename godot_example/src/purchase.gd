@@ -32,6 +32,10 @@ func set_purchase(purchase: RuStorePurchase):
 	_purchaseInvoiceId.text = INVOICE_ID_LABEL + _purchase.invoiceId
 	_purchaseOrderId.text = ORDER_ID_LABEL + _purchase.orderId
 
+func free_purchase():
+	if is_instance_valid(_purchase):
+		_purchase.free()
+	_purchase = null
 
 func _on_delete_pressed():
 	on_delete_purchase_pressed.emit(_purchase)
@@ -41,3 +45,7 @@ func _on_confirm_pressed():
 
 func _on_info_pressed():
 	on_get_purchase_info_pressed.emit(_purchase)
+
+func _notification(what: int):
+	if what == NOTIFICATION_PREDELETE:
+		free_purchase()
