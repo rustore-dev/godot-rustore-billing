@@ -1,6 +1,6 @@
 # RuStoreProductSubscription
 # @brief Информация о подписке.
-class_name RuStoreProductSubscription extends Object
+class_name RuStoreProductSubscription extends RefCounted
 
 # @brief Период подписки.
 var subscriptionPeriod: RuStoreSubscriptionPeriod = null

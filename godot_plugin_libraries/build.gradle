@@ -1,8 +1,12 @@
 ext {
-    rustore_billingclient_version = '9.0.1'
+    rustore_billingclient_version = '9.1.0'
     rustore_core_version = rustore_billingclient_version
     rustore_sdk_type = ''
-    sdk_version_code = 90001
+    sdk_version_code = 90100
+
+    sdk_billingclient_dependence = "ru.rustore.sdk:billingclient:$rustore_billingclient_version$rustore_sdk_type"
+    sdk_core_dependence = "ru.rustore.sdk:core:$rustore_core_version$rustore_sdk_type"
+    sdk_gson_dependence = "com.google.code.gson:gson:2.10.1"
 }
 buildscript {
     ext.kotlin_version = "1.9.0"

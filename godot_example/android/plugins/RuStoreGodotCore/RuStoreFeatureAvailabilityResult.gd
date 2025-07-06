@@ -19,3 +19,9 @@ func _init(json: String = ""):
 		if obj.has("cause"):
 			var jcause = JSON.stringify(obj["cause"])
 			cause = RuStoreError.new(jcause)
+
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		if is_instance_valid(cause):
+			cause.free()
+		cause = null

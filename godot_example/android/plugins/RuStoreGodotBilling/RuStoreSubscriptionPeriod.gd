@@ -1,6 +1,6 @@
 # RuStoreSubscriptionPeriod
 # @brief Информация о периоде подписки.
-class_name RuStoreSubscriptionPeriod extends Object
+class_name RuStoreSubscriptionPeriod extends RefCounted
 
 # @brief Количество дней.
 var days: int = 0
