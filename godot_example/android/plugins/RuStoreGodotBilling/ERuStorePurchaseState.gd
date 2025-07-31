@@ -1,6 +1,6 @@
 # ERuStorePurchaseState
 # @brief Состояние покупки.
-class_name ERuStorePurchaseState extends Object
+class_name ERuStorePurchaseState
 
 # @brief Доступные значения.
 enum Item {

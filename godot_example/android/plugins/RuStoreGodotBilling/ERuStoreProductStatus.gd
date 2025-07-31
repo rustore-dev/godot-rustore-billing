@@ -1,6 +1,6 @@
 # ERuStoreProductStatus
 # @brief Статус продукта.
-class_name ERuStoreProductStatus extends Object
+class_name ERuStoreProductStatus
 
 # @brief Доступные значения.
 enum Item {

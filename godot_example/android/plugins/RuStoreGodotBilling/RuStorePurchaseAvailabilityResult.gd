@@ -1,6 +1,6 @@
 # RuStorePurchaseAvailabilityResult
 # @brief Проверка доступности функционала.
-class_name RuStorePurchaseAvailabilityResult extends Object
+class_name RuStorePurchaseAvailabilityResult extends RefCounted
 
 # @brief
 #	Информация о доступности.
@@ -10,9 +10,3 @@ var isAvailable: bool = false
 
 # @brief Информация об ошибке.
 var cause: RuStoreError = null
-
-func _notification(what):
-	if what == NOTIFICATION_PREDELETE:
-		if is_instance_valid(cause):
-			cause.free()
-		cause = null
