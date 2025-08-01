@@ -1,6 +1,6 @@
 # RuStoreError
 # @brief Информация об ошибке.
-class_name RuStoreError extends Object
+class_name RuStoreError extends RefCounted
 
 # @brief
 #	Название ошибки.

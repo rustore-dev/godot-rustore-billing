@@ -1,6 +1,6 @@
 # RuStorePurchase
 # @brief Информация о покупке.
-class_name RuStorePurchase extends Node
+class_name RuStorePurchase extends RefCounted
 
 # @brief Идентификатор покупки.
 var purchaseId = null

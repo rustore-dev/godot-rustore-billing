@@ -1,6 +1,6 @@
 # ERuStoreProductType
 # @brief Тип продукта.
-class_name ERuStoreProductType extends Object
+class_name ERuStoreProductType
 
 # @brief Доступные значения.
 enum Item {

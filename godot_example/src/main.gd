@@ -58,12 +58,10 @@ func _on_get_authorization_status_button_pressed():
 func _on_get_authorization_status_success(result: RuStoreBillingUserAuthorizationStatus):
 	_loading.visible = false
 	OS.alert(str(result.authorized), "UserAuthorizationStatus")
-	result.free()
 
 func _on_get_authorization_status_failure(error: RuStoreError):
 	_loading.visible = false
 	_core_client.show_toast(error.description)
-	error.free()
 
 
 func _on_tab_container_tab_clicked(tab):
@@ -93,7 +91,6 @@ func _on_get_products_success(products: Array):
 func _on_get_products_failure(error: RuStoreError):
 	_loading.visible = false
 	_core_client.show_toast(error.description)
-	error.free()
 
 
 # Purchase product
@@ -111,11 +108,9 @@ func _on_purchase_product_success(result: RuStorePaymentResult):
 		_core_client.show_toast("InvalidPaymentState")
 	else:
 		_core_client.show_toast("RuStorePaymentResult")
-	result.free()
 
 func _on_purchase_product_failure(error: RuStoreError):
 	_core_client.show_toast(error.description)
-	error.free()
 
 
 # Update purchases list
@@ -140,14 +135,12 @@ func _on_get_purchases_success(purchases: Array):
 func _on_get_purchases_failure(error: RuStoreError):
 	_loading.visible = false
 	_core_client.show_toast(error.description)
-	error.free()
 
 
 # Confirm purchase
 func _on_confirm_purchase_pressed(purchase: RuStorePurchase):
 	_loading.visible = true
 	_billing_client.confirm_purchase(purchase.purchaseId, purchase.developerPayload)
-	purchase.free()
 
 func _on_confirm_purchase_success(purchase_id: String):
 	_loading.visible = false
@@ -157,7 +150,6 @@ func _on_confirm_purchase_success(purchase_id: String):
 func _on_confirm_purchase_failure(purchase_id: String, error: RuStoreError):
 	_loading.visible = false
 	_core_client.show_toast(purchase_id + " " + error.description)
-	error.free()
 
 
 # Delete purchase
@@ -173,7 +165,6 @@ func _on_delete_purchase_success(purchase_id: String):
 func _on_delete_purchase_failure(purchase_id: String, error: RuStoreError):
 	_loading.visible = false
 	_core_client.show_toast(purchase_id + " " + error.description)
-	error.free()
 
 
 # Get purchase info
@@ -184,31 +175,24 @@ func _on_get_purchase_info_pressed(purchase: RuStorePurchase):
 func _on_get_purchase_info_success(purchase: RuStorePurchase):
 	_loading.visible = false
 	OS.alert(purchase.language + "\n" + purchase.amountLabel, purchase.productId)
-	purchase.free()
 
 func _on_get_purchase_info_failure(purchase_id: String, error: RuStoreError):
 	_loading.visible = false
 	_core_client.show_toast(purchase_id + " " + error.description)
-	error.free()
 
 
 # Debug logs
 func _on_payment_logger_debug(error: RuStoreError, message: String, tag: String):
 	_core_client.show_toast(tag + ": " + message)
-	error.free()
 
 func _on_payment_logger_error(error: RuStoreError, message: String, tag: String):
 	_core_client.show_toast(tag + ": " + message)
-	error.free()
 	
 func _on_payment_logger_info(error: RuStoreError, message: String, tag: String):
 	_core_client.show_toast(tag + ": " + message)
-	error.free()
 	
 func _on_payment_logger_verbose(error: RuStoreError, message: String, tag: String):
 	_core_client.show_toast(tag + ": " + message)
-	error.free()
 	
 func _on_payment_logger_warning(error: RuStoreError, message: String, tag: String):
 	_core_client.show_toast(tag + ": " + message)
-	error.free()

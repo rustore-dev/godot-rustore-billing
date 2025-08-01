@@ -1,6 +1,6 @@
 # RuStoreProduct
 # @brief Информация о продукте.
-class_name RuStoreProduct extends Object
+class_name RuStoreProduct extends RefCounted
 
 # @brief Идентификатор продукта, который был присвоен продукту в консоли RuStore.
 var productId: String = ""
