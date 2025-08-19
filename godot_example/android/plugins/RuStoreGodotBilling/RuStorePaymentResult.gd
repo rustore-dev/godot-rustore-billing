@@ -1,6 +1,6 @@
 # RuStorePaymentResult
 # @brief Родительский класс результатов покупки.
-class_name RuStorePaymentResult extends Object
+class_name RuStorePaymentResult extends RefCounted
 
 # @brief Результат успешного завершения покупки цифрового товара.
 class Success extends RuStorePaymentResult:

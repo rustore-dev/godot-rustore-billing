@@ -1,4 +1,4 @@
-class_name RuStoreBillingJsonParser extends Object
+class_name RuStoreBillingJsonParser
 
 static func ToPurchaseAvailabilityResult(json: String = "") -> RuStorePurchaseAvailabilityResult:
 	var result: RuStorePurchaseAvailabilityResult = null

@@ -1,6 +1,6 @@
 # RuStoreBillingAuthorizationStatus
 # @brief Статус авторизации у пользователя.
-class_name RuStoreBillingUserAuthorizationStatus extends Object
+class_name RuStoreBillingUserAuthorizationStatus extends RefCounted
 
 # @brief
 #	Значение статуса авторизации у пользователя.
